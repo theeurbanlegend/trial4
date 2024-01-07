@@ -21,7 +21,7 @@ const UserProfile = () => {
     // Fetch user data from the server
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/api/user/current/${id}`);
+        const response = await axios.get(`https://api-brosforlyf.onrender.com/api/user/current/${id}`);
         const userData = response.data.user;
         setUser(userData);
         setProfilePhotoId(userData.photo.filename);
@@ -47,7 +47,7 @@ const UserProfile = () => {
       formData.append('id', id);
       formData.append('currentPhotoId', currentPhotoId);
       try {
-        const uploadResponse = await axios.post('http://localhost:3001/api/user/add', formData, {
+        const uploadResponse = await axios.post('https://api-brosforlyf.onrender.com/api/user/add', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -67,7 +67,7 @@ const UserProfile = () => {
     // Perform save operation (update the user's email)
     try {
       if(editEmailMode){
-      const response = await axios.post('http://localhost:3001/api/user/update', {
+      const response = await axios.post('https://api-brosforlyf.onrender.com/api/user/update', {
         username: user.username,
         oldemail: user.currentEmail,
         newemail: newEmail,
@@ -96,7 +96,7 @@ const UserProfile = () => {
   const handleOtpSubmit = async (otp) => {
     try {
       // Send OTP to the server for verification
-      const response = await axios.post('http://localhost:3001/api/user/verify', {
+      const response = await axios.post('https://api-brosforlyf.onrender.com/api/user/verify', {
         otp,
         id,
       });
@@ -149,7 +149,7 @@ const UserProfile = () => {
       <div className="profile-header">
       {!previewURL &&(
         <div className="profile-photo" onClick={()=>setEditPhotoMode(true)}>
-          <img src={`http://localhost:3001/api/user/photo/${profilePhotoId}`} alt="Profile" />
+          <img src={`https://api-brosforlyf.onrender.com/api/user/photo/${profilePhotoId}`} alt="Profile" />
           <div className="over-lay">
             <span>Change Pic</span>
           </div>

@@ -162,7 +162,7 @@ const VoiceRoom = () => {
   // Define the custom hooks
   const userId = useUserId();
   const stream = useUserMedia();
-  const socket = useRef(io('http://localhost:3001',{path:'/voice'})).current;
+  const socket = useRef(io('https://api-brosforlyf.onrender.com',{path:'/voice'})).current;
   const peersRef = usePeers(roomId, userId, stream, socket);
   const [,setToast] = useToasts();
   

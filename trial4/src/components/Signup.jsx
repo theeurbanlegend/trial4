@@ -21,7 +21,7 @@ const Signup = () => {
         const signupData={fullname,username,email,password}
 
         try{
-            await axios.post('http://localhost:3001/api/user/register', signupData)
+            await axios.post('https://api-brosforlyf.onrender.com/api/user/register', signupData)
             .then((res)=>{
                 console.log(res)
                 const id=res.data.id

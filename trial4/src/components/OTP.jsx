@@ -21,7 +21,7 @@ const OtpForm = () => {
     }
     const otpData={id,otp}
     try{
-        await axios.post('http://localhost:3001/api/user/verify', otpData)
+        await axios.post('https://api-brosforlyf.onrender.com/api/user/verify', otpData)
         .then((res)=>{
             console.log("Res: ",res)
             setOtp('')

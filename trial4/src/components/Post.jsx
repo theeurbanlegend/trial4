@@ -7,7 +7,7 @@ import 'video.js/dist/video-js.css';
 const Post = ({ id,vidId, datePosted, posterId, subjectSummary, imageUrl }) => {
   const [timeAgo, setTimeAgo] = useState('');
   const [poster, setPoster] = useState('');
-  const url = 'http://localhost:3001';
+  const url = 'https://api-brosforlyf.onrender.com';
 
   useEffect(() => {
     const calculateTimeAgo = () => {
@@ -32,7 +32,7 @@ const Post = ({ id,vidId, datePosted, posterId, subjectSummary, imageUrl }) => {
       }
     };
     const getPoster=async()=>{
-      await axios.get(`http://localhost:3001/api/user/current/${posterId}`)
+      await axios.get(`https://api-brosforlyf.onrender.com/api/user/current/${posterId}`)
       .then((res)=>{
         setPoster(res.data.user.username)
       })

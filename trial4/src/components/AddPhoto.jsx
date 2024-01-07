@@ -36,7 +36,7 @@ const ProfilePhotoForm = ({ onSkip, onSave }) => {
     formData.append('id', id); // Replace with actual username
     formData.append('photo', selectedPhoto);
     try{
-        await axios.post('http://localhost:3001/api/user/add', formData)
+        await axios.post('https://api-brosforlyf.onrender.com/api/user/add', formData)
         .then((res)=>{
             console.log(res)
             navigate('/home')

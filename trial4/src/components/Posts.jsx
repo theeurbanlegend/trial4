@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Post from './Post';
 
 const Posts = ({ selectedCategory }) => {
-  const url='http://localhost:3001'
+  const url='https://api-brosforlyf.onrender.com'
   const [obtainedPosts, setObtainedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 

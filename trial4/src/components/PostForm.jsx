@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddPost = () => {
   //const url = 'http://localhost/3001';
-  const url='http://localhost:3001'
+  const url='https://api-brosforlyf.onrender.com'
   const id = localStorage.getItem('id')
   const navigate=useNavigate()
   const [files, setFiles] = useState(null);

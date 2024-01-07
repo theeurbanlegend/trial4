@@ -17,7 +17,7 @@ const Navbar = () => {
                 navigate('/login')
               }
               setuserId(id)
-                await axios.get(`http://localhost:3001/api/user/current/${id}`)
+                await axios.get(`https://api-brosforlyf.onrender.com/api/user/current/${id}`)
                 .then((res)=>{
                   console.log(res)
                   setusername(res.data.user.username)
@@ -46,7 +46,7 @@ const Navbar = () => {
         </div>
         
         <div className="profile-photo">
-          <img src={`http://localhost:3001/api/user/photo/${profilePhotoId}`||'user.jpg'} alt="Profile" title={username} onClick={()=>navigate(`/profile/${userId}`)}/>
+          <img src={`https://api-brosforlyf.onrender.com/api/user/photo/${profilePhotoId}`||'user.jpg'} alt="Profile" title={username} onClick={()=>navigate(`/profile/${userId}`)}/>
           
         </div>
       </div>
