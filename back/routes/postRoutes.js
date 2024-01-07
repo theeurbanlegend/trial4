@@ -1,4 +1,4 @@
-const { getAllPosts,getImage,addPost,getMostRecentPost,getPost,deletePost } = require('../controllers/postcontrollers')
+const { getAllPosts,getImage,addPost,getMostRecentPost,getPost,deletePost } = require('../controllers/Postcontrollers')
 
 
 const postRoute=require('express').Router()
