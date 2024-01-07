@@ -18,13 +18,13 @@ const app = express();
 const server = http.createServer(app);
 const io1 = new Server(server,{
   cors:{
-    origin:'http://localhost:5173'
+    origin:'https://brosforlyf.onrender.com'
   },
   path:'/chat'
 } )
 const io2 = new Server(server,{
   cors:{
-    origin:'http://localhost:5173'
+    origin:'https://brosforlyf.onrender.com'
   },
   path:'/voice'
 } )
