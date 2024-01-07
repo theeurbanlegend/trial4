@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+/* App.css */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+.signup-wrapper {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.signup-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-group {
+  margin-bottom: 20px;
+}
+
+.signup-item {
+  margin-bottom: 16px;
+}
+
+label {
+  margin-bottom: 8px;
+}
+
+input {
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.signup-actions {
+  text-align: center;
+}
+
+.signup-button {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.signup-login-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.signup-login-link span {
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* Add any additional styling based on your preferences */

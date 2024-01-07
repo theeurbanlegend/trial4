@@ -1,0 +1,818 @@
+/* Login.css */
+html{
+  font-family: 'Inter', sans-serif;
+}
+.post-image{
+  width:50%;
+}
+.add-post-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(224, 108, 108, 0.1);
+}
+
+.preview-files {
+  display: block;
+  width: 40%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+.drop-zone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+.post{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.post-content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.post-content img{
+  margin-top: 20px;
+}
+.drop-zone p {
+  margin: 0;
+}
+.user-profile
+.drop-zone:hover {
+  border-color: #4caf50;
+}
+.add-post-container h1 {
+  font-size: 3.2em;
+  background-image: linear-gradient(to left, rgba(0, 0, 255, 0.5), rgba(255, 0, 0, 0.5));
+  line-height: 1.1;
+}
+
+
+#overlay {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px; /* Adjust the width as needed */
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 999; /* Ensure it's above other elements */
+}
+
+.progress-bar-container {
+  text-align: center;
+}
+
+#progress-bar {
+  width: 100%;
+  height: 20px;
+  background: #4caf50;
+}
+
+#progress-text {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+
+.post-button-area{
+  display: flex;
+  justify-content: center;
+}
+.post-button {
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+.welcomeTitle {
+  color: linear-gradient(to left, rgba(0, 0, 255, 0.5), rgba(255, 0, 0, 0.5));
+  margin-bottom: 18px;
+}
+
+.post-button:hover {
+  background-color: #45a049;
+}
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-content {
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.login-header {
+  margin-bottom: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.login-container label {
+  font-weight: bold;
+}
+
+.login-container input {
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 5px;
+}
+
+.login-container button {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.signup-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.signup-link span {
+  color: #007bff;
+  cursor: pointer;
+}
+
+
+.circle {
+  width: 56px;
+  height: 56px;
+  position: relative;
+  border-radius: 50%;
+  border: 2px solid red;
+  margin: 30vh auto;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.before,
+.after {
+  content: '';
+  position: absolute;
+  width: 42px;
+  height: 2px;
+  background-color: red;
+  border-radius: 0;
+  top: 27px;
+  z-index: 0;
+}
+
+.before {
+  left: 7px;
+  animation: rotateBefore 0.3s forwards ease-out;
+}
+
+.after {
+  right: 7px;
+  animation: rotateAfter 0.25s forwards ease-in;
+}
+
+@keyframes rotateBefore {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(225deg);
+  }
+}
+
+@keyframes rotateAfter {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(-225deg);
+  }
+}
+
+.circle:hover {
+  border: 1px solid red;
+  padding-bottom: 1px;
+}
+ .greentick svg {
+  width: 60px;
+  display: block;
+  margin: 40px auto 0; 
+}
+
+.path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+  &.circle {
+    -webkit-animation: dash .9s ease-in-out;
+    animation: dash .9s ease-in-out;
+  }
+  
+  &.line {
+    stroke-dashoffset: 1000;
+    -webkit-animation: dash .9s .35s ease-in-out forwards;
+    animation: dash .9s .35s ease-in-out forwards;
+  }
+  &.check {
+    stroke-dashoffset: -100;
+    -webkit-animation: dash-check .9s .35s ease-in-out forwards;
+    animation: dash-check .9s .35s ease-in-out forwards;
+  }
+}
+
+p {
+  text-align: center;
+  margin: 20px 0 60px;
+  font-size: 1.25em;
+  &.success {
+    color: #73AF55;
+  }
+  &.error {
+    color: #D06079;
+  }
+}
+
+
+@-webkit-keyframes dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@-webkit-keyframes dash-check {
+  0% {
+    stroke-dashoffset: -100;
+  }
+  100% {
+    stroke-dashoffset: 900;
+  }
+}
+
+@keyframes dash-check {
+  0% {
+    stroke-dashoffset: -100;
+  }
+  100% {
+    stroke-dashoffset: 900;
+  }
+}
+/* Add this CSS to your existing styles or create a new CSS file */
+
+
+.overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px; /* Adjust the width as needed */
+  padding: 20px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Ensure the overlay is above other elements */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 18px;
+}
+.overlay.show {
+  opacity: 1;
+}
+
+
+/* OtpForm.css */
+.otp-group {
+  margin-bottom: 20px;
+}
+
+.otp-form label {
+  margin-bottom: 8px;
+}
+
+.otp-form input {
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.otp-actions {
+  display:flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.otp-form button {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* ProfilePhotoForm.css */
+.profile-photo-form {
+  max-width: 300px;
+  margin: 20px auto;
+}
+
+.profile-photo-form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.profile-photo-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.profile-photo-form .photo-preview {
+  margin-top: 15px;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+}
+
+.profile-photo-form .photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.profile-photo-form .button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.profile-photo-form button {
+  background-color: #007bff;
+  color: #ffffff;
+  padding: 10px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.profile-photo-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Add these styles to your CSS file */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+}
+
+.navbar-left {
+  flex: 1;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+/* .navbar-right .profile-photo{
+  position: relative;
+}
+.nav-overlay {
+  position: absolute;
+  top:0;
+  max-width:300px;
+  max-height: fit-content;
+  z-index: 999;
+  right: 0;
+  margin-top: 40px;
+  width: 100%;
+  padding: 10px;
+  background-color: rgba(245, 242, 242, 0.8);
+  color: #0c0606;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+ .nav-overlay{
+  opacity: 1;
+  visibility: visible;
+} */
+.post-plus-btn {
+  display: flex;
+  cursor: pointer;
+  border: none;
+  width:20px;
+  background-color: #45a049;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-radius: 9999px;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden; /* Hide overflowing content */
+  transition: width 0.3s ease-out; /* Transition for width change */
+}
+
+
+
+.post-plus {
+  font-size: xx-large;
+  transition: margin-right 0.3s ease-out; /* Transition for margin-right change */
+}
+
+.post-text {
+  font-size: large;
+  opacity: 0; /* Initially hide the text */
+  transition: opacity 0.3s ease-out; /* Transition for opacity change */
+}
+
+.post-plus-btn:hover {
+  width:70px;
+}
+
+.post-plus-btn:hover .post-plus {
+  
+  margin-right: 10px;
+}
+.post-plus-btn:hover .post-text {
+  opacity: 1; /* Show the text on hover */
+}
+
+
+
+.profile-photo {
+  width: 40px;
+  cursor: pointer;
+  position: relative;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-left: 10px;
+  border: 1px solid gray;
+}
+.over-lay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0; /* Initially invisible */
+  transition: opacity 0.3s ease-in-out;
+}
+
+.profile-photo:hover .over-lay {
+  opacity: 1; /* Make the overlay visible on hover */
+}
+
+.over-lay span {
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+}
+.profile-photo img {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Add these styles to your CSS file */
+.user-profile {
+  max-width: 400px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.user-profile .profile-header {
+  text-align: center;
+}
+
+.user-profile .profile-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.user-profile .profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.user-profile .profile-details {
+  margin-bottom: 20px;
+}
+
+.user-name {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.user-info {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.info-label {
+  flex: 1;
+  font-weight: bold;
+}
+
+.info-value {
+  flex: 2;
+}
+
+.user-profile .profile-actions {
+  text-align: right;
+}
+
+.user-profile button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.posts-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding:15px;
+  /* Three columns with the first column being 3 times the size of the second column */
+}
+
+
+/* Add any additional styling based on your preferences */
+
+
+.profile-avatar{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 10px;
+}
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.chat-dash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.content-container {
+  display: flex;
+  max-width: 800px;
+}
+
+.user-list {
+  width: 200px;
+  
+  border-right: 1px solid #ccc;
+  height:80vh;
+  overflow: hidden;
+  transition: width 0.3s ease-in-out;
+}
+
+.user-list-content {
+  padding: 10px;
+}
+
+.toggle-button {
+  cursor: pointer;
+  font-size: 20px;
+  padding: 5px;
+}
+
+.visible {
+  width: 200px;
+}
+
+.hidden {
+  width: 0;
+}
+
+
+ .user-header {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.user {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+.profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: flex-start;
+}
+
+.user-avatar {
+  
+  width: 40px;
+  height: 40px;
+  background-color: #ddd;
+  margin-right: 10px;
+}
+
+.status-indicator {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  
+}
+
+.online {
+  background-color: green;
+}
+
+.offline {
+  background-color: gray;
+}
+
+.message-preview {
+  
+  z-index: 999;
+  flex-grow: 1;
+  padding: 10px;
+}
+
+.message-header {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.message-list {
+  background-color: #85b8ee;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.talk-bubble {
+	margin: 40px;
+  display: inline-block;
+  position: relative;
+	width: 200px;
+	height: auto;
+	background-color: white;
+}
+.round{
+  border-radius: 30px;
+	-webkit-border-radius: 30px;
+	-moz-border-radius: 30px;
+
+}
+.tri-right.border.right-in:before {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: auto;
+	right: -40px;
+  top: 30px;
+	bottom: auto;
+	border: 20px solid;
+	border-color: #666 transparent transparent #666;
+}
+.tri-right.right-in:after{
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: auto;
+	right: -20px;
+  top: 38px;
+	bottom: auto;
+	border: 12px solid;
+	border-color: white transparent transparent white;
+}
+/* Right triangle, left side slightly down */
+.tri-right.border.left-in:before {
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: -40px;
+	right: auto;
+  top: 30px;
+	bottom: auto;
+	border: 20px solid;
+	border-color: #666 #666 transparent transparent;
+}
+.tri-right.left-in:after{
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  left: -20px;
+	right: auto;
+  top: 38px;
+	bottom: auto;
+	border: 12px solid;
+	border-color: white white transparent transparent;
+}
+.sender{
+  text-align:right;
+}
+.receiver{
+  text-align:left;
+}
+.message-input {
+  display: flex;
+  margin-top: 10px;
+}
+
+.chat-dash input {
+  flex-grow: 1;
+  padding: 5px;
+  margin-right: 5px;
+}
+
+.chat-dash button {
+  padding: 5px;
+  cursor: pointer;
+}

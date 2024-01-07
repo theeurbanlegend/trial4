@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            margin-bottom: 8px;
+        }
+        input, select, button {
+            margin-bottom: 16px;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>User Login</h2>
+        <form action="/api/user/login" method="POST" >
+            
+
+            <label for="email">Username or Email:</label>
+            <input type="text" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <script>
+            function prepareLoginData() {
+                // Get the selected input type
+                const inputTypeField = document.getElementById('inputType');
+                const selectedInputType = inputTypeField.value;
+
+                // Get the entered value from the input field
+                const inputField = document.getElementById('usernameOrEmail');
+                const enteredValue = inputField.value.trim();
+
+                // Determine the correct form field to populate based on the selected input type
+                const usernameField = document.getElementById('username');
+                const emailField = document.getElementById('email');
+
+                // Set the value of the appropriate form field
+                if (selectedInputType === 'email') {
+                    // If it's an email, populate the email field
+                    emailField.value = enteredValue;
+                    // Clear the username field (if previously populated)
+                    usernameField.value = '';
+                } else {
+                    // If it's a username, populate the username field
+                    usernameField.value = enteredValue;
+                    // Clear the email field (if previously populated)
+                    emailField.value = '';
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>
