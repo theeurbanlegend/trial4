@@ -17,7 +17,6 @@ const Posts = ({ selectedCategory }) => {
         }
 
         const data = await response.json();
-        console.log(data)
         // Filter posts based on the selected category
         //const filteredPosts = data.filter((post) => post.category === selectedCategory);
         setObtainedPosts(data);
@@ -28,7 +27,7 @@ const Posts = ({ selectedCategory }) => {
       }
     };
 
-    //fetchPosts();
+    fetchPosts();
   }, [selectedCategory]);
 
   return (
