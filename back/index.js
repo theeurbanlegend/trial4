@@ -98,7 +98,7 @@ io2.on('connection', (socket) => {
     // Find the socket id of the target user
     const socketId = rooms[data.roomId][data.targetId];
     // Emit the signal data to the target user
-    io1.to(socketId).emit('signal', data);
+    io2.to(socketId).emit('signal', data);
   });
 
   // Leave a room
