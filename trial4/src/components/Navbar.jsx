@@ -24,7 +24,7 @@ const Navbar = () => {
               setuserId(id)
                 await axios.get(`https://api-brosforlyf.onrender.com/api/user/current/${id}`)
                 .then((res)=>{
-                  console.log(res)
+                  
                   setusername(res.data.user.username)
                   setprofilePhotoId(res.data.user.photo.filename)
                 })
