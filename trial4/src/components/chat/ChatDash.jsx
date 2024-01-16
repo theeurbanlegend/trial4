@@ -3,6 +3,8 @@ import io from 'socket.io-client';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import Messages from './Messages';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const ChatDash = () => {
   const navigate=useNavigate()
   const [showUserList, setShowUserList] = useState(true);
@@ -64,7 +66,7 @@ if(newSocket){
       const excludedCurrent = res.data.filter((user) => user._id !== id);
       const includeedCurrent = res.data.filter((user) => user._id === id);
 
-      socket.emit('join room', { roomName: 'chatLobby', nickname: includeedCurrent[0].username });
+      socket.emit('join room', { roomName: 'chatLobby', userId: includeedCurrent[0]._id});
       socket.emit('newUserOnline', { roomName: 'chatLobby' });
 
       socket.on('getUsersOnline', ({ nicknames }) => {
@@ -72,9 +74,10 @@ if(newSocket){
       });
 
       const userData = excludedCurrent.map((user) => {
+        
         return {
           ...user,
-          online: obtainedNicknames.includes(user.username),
+          online: obtainedNicknames.includes(user._id),
           imageUrl: `https://api-brosforlyf.onrender.com/api/user/photo/${user.photo.filename}`,
         };
       });
@@ -86,29 +89,33 @@ if(newSocket){
 
       newSocket.on('getUsersOnline', ({ nicknames }) => {
         setObtainedNicknames([...nicknames]);
-      });
+      
 
       const userData = userList.map((user) => {
+        
         return {
           ...user,
-          online: obtainedNicknames.includes(user.username)
+          online: nicknames.includes(user._id)
         };
       });
 
       setUserList(userData);
+    });
     };
 
    
       if(resyncData && newSocket){
         console.log('Commence resyincing....')
-        setTimeout(()=>{
+        const syncDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+        syncDelay(1000)
+        .then(()=>{
           fetchUsersWithSocket()
           .then(()=>{
             setResyncData(false)
             console.log("Completed Resync")
-          })
-        },4500)
-        
+          })  
+        })
+               
         
       }
    
@@ -131,6 +138,7 @@ if(newSocket){
     return () => {
       if(newSocket){
         console.log('Offline mode....')
+        newSocket.emit('outofRoom',{roomName:'chatLobby',userId:id})
         newSocket.disconnect();
       }
     };
@@ -175,20 +183,15 @@ if(newSocket){
   const toggleUserList = () => {
     setShowUserList(!showUserList);
   };
-  const formatTimestamp = (timestamp) => {
-    const options = {
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    };
-  
-    const formattedTimestamp = new Date(timestamp).toLocaleString('en-US', options);
+  const formatTimestamp = (timestamp) => { 
+    const formattedTimestamp = new Date(timestamp).toLocaleString('en-US', {hour:'numeric',minute:'2-digit'});
     return formattedTimestamp;
   };
   
   const handleLeave=()=>{
     if(newSocket){
       console.log('Offline mode....')
+      newSocket.emit('outofRoom',{roomName:'chatLobby',userId:id})
       newSocket.disconnect();
     }
     navigate('/home')
@@ -197,6 +200,9 @@ if(newSocket){
     setUserSelected(user)
     setUserIsSelected(true)
     setMessagePreview('')
+    if(roomId){
+      newSocket.emit('removeRoom',{roomName:roomId})
+    }
     const sessionId=`${id}:${user._id}`
     const senderId=id
     const receiverId=user._id
@@ -208,7 +214,8 @@ if(newSocket){
         
       }
     })
-    newSocket.emit('join room', {roomName:'chat', nickname:user.username})
+    newSocket.emit('join room', {roomName:sessionId, senderId,receiverId})
+    setRoomId(sessionId)
   }
 
 
@@ -229,16 +236,14 @@ if(newSocket){
           
         }
        })
-      newSocket.emit('sendMessage',{roomName:'chat'})
+      newSocket.emit('sendMessage',{roomName:sessionId, senderId, receiverId})
     }
    setInputMessage('')
-    // and handle it on the server side to update messagePreview
-    console.log('Sending message:', inputMessage);
   };
 
   return (
     <div className="chat-dash">
-      <button style={{position:'absolute', top:4, left:3}} onClick={handleLeave}>Back</button>
+      <FontAwesomeIcon style={{ position: 'absolute', top: 4, left: 4, marginLeft: '2px', marginTop: '2px' }} icon={faArrowLeft} onClick={handleLeave}/>
       <h1>{!resyncData?'Chat Dashboard':'Connecting....'}</h1>
       <div className="content-container">
       <div className="toggle-button" onClick={toggleUserList}>
@@ -285,8 +290,9 @@ if(newSocket){
                   <div key={message._id} className={message.senderId==userSelected._id?"talk-bubble tri-right round left-in":"talk-bubble tri-right round right-in"}>
                   <div className="talktext">
                     <p>{message.message}</p>
+                   
                   </div>
-                  <div>{formatTimestamp(message.timestamp)}</div>
+                  <div style={{position:'absolute', bottom:0, right:20, fontSize:'12px'}}>{formatTimestamp(message.timestamp)}</div>
                 </div>
                 )):(<div>{`Start A Chat :)`}</div>)}
               </div>
@@ -296,7 +302,7 @@ if(newSocket){
                   placeholder="Type your message..."
                   value={inputMessage}
                   onChange={(e) =>{ setInputMessage(e.target.value)
-                    newSocket.emit('typing')
+                    newSocket.emit('typing',{roomName:roomId})
                   }}
                 />
                 <button onClick={handleSendMessage}>Send</button>

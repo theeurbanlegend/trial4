@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import OtpOverlay from './OTPOverlay';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const UserProfile = () => {
   const [user, setUser] = useState({ fullname: '', currentEmail: '', username: '' });
@@ -101,8 +103,6 @@ const UserProfile = () => {
         id,
       });
 
-      console.log(response);
-
       // OTP verification successful
       if (response.data.msg === 'OTP verification successful!') {
         // Update the user's email in the state
@@ -145,7 +145,7 @@ const UserProfile = () => {
 
   return (
     <div className="user-profile">
-      <button style={{ position: 'absolute', top: 0, left: 0, marginLeft: '2px', marginTop: '2px' }} onClick={() => navigate('/home')}>Back</button>
+      <button style={{ position: 'absolute', top: 0, left: 0, marginLeft: '2px', marginTop: '2px' }} onClick={() => navigate('/home')}><FontAwesomeIcon icon={faArrowLeft} /></button>
       <div className="profile-header">
       {!previewURL &&(
         <div className="profile-photo" onClick={()=>setEditPhotoMode(true)}>

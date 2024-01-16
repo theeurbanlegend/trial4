@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const AddPost = () => {
   //const url = 'https://api-brosforlyf.onrender.com';
@@ -11,7 +13,7 @@ const AddPost = () => {
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState('');
   const [category, setCategory] = useState('MOMENTS');
-  const [postTitle, setPostTitle] = useState('');
+  const [postTitle, setPostTitle] = useState('New Post');
   const [poster, setPoster] = useState('');
   const [postSummary, setPostSummary] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -137,6 +139,7 @@ const AddPost = () => {
 
   return (
     <div className="add-post-container">
+      <FontAwesomeIcon icon={faArrowLeft} onClick={()=>navigate('/home')}/>
       {showOverlay && uploadProgress > 0 && (
         <div id="overlay">
           <div className="progress-bar-container">
@@ -149,7 +152,8 @@ const AddPost = () => {
           </div>
         </div>
       )}
-      <svg width={500} height={100}>
+      <div className='svg-header'>
+      <svg width={700} height={100}>
         <defs>
           <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" style={{ stopColor: '#7f00ff', stopOpacity: 1 }} />
@@ -157,9 +161,10 @@ const AddPost = () => {
           </linearGradient>
         </defs>
 
-        <text style={{ fill: 'url(#grad)', fontSize: 45, textAnchor: 'middle'  }} x={300} y={40}>Post a Moment &hearts;
+        <text style={{ fill: 'url(#grad)', fontSize: 30, textAnchor: 'middle'  }} x={150} y={40}>Post a Moment &hearts;
         </text>
       </svg>
+      </div>
       <form encType="multipart/form-data">
         <div
           className="drop-zone"
@@ -170,13 +175,12 @@ const AddPost = () => {
         >
           <p>Click or Drag & Drop your files here</p>
         </div>
-        <input type="file" name="files" id="fileInput" onChange={handleFileSelect} style={{ display: 'none' }} />
         {preview && <img src={preview} alt="Preview" className="preview-files" />}
-        <label htmlFor="postTitle">Post Title:</label>
-        <input type="text" name="postTitle" id="postTitle" value={postTitle} onChange={(e) => setPostTitle(e.target.value)} />
+        <input type="file" name="files" id="fileInput" onChange={handleFileSelect} style={{ display: 'none' }} />
+        
         <br />
-        <label htmlFor="category">Category:</label>
-        <select name="category" id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
+        <label style={{marginLeft:'3px'}} htmlFor="category">#Tag: </label>
+        <select required name="category" id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="MOMENTS">MOMENTS</option>
           <option value="GAMES">GAMES</option>
           <option value="SPORTS">SPORTS</option>
@@ -185,12 +189,15 @@ const AddPost = () => {
          
         </select>
         <br />
-        <label htmlFor="postSummary">Post Summary:</label>
+        <br />
+        <label style={{marginLeft:'3px'}}  htmlFor="postSummary">About:</label>
+        <br/>
         <textarea
          name="postSummary"
         id="postSummary" 
+        required
         value={postSummary}
-        style={{width:'500px'}}
+        style={{maxWidth:'fit-content', marginLeft:'5px'}}
          onChange={(e) => setPostSummary(e.target.value)}></textarea>
         <br />
         <div className="post-button-area">
@@ -198,8 +205,6 @@ const AddPost = () => {
             Post
           </button>
         </div>
-        {fileName && <p>File Name: {fileName}</p>}
-        {fileType && <p>File Type: {fileType}</p>}
         {fileSize && <p>File Size: {fileSize}</p>}
         {uploadsuccess === true && (
           <div style={{ color: 'green' }}>

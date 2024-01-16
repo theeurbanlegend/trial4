@@ -3,7 +3,7 @@ import Navbar from './Navbar';
 import Posts from './Posts';
 import Sidebar from './Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight ,faHamburger} from '@fortawesome/free-solid-svg-icons';
 import { createContext } from 'react';
 export const sidebarContext=createContext()
 const Home = () => {
@@ -25,9 +25,6 @@ const Home = () => {
       )}
       <div className="content">
         <Navbar />
-        <button className="toggle-button" onClick={toggleSidebar}>
-          <FontAwesomeIcon title='Show Sidebar' icon={isSidebarOpen ? faArrowLeft : faArrowRight} />
-        </button>
         <Posts />
       </div>
     </div>

@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser, faCog, faMusic, faHeadphones, faPhotoVideo, faVideo, faFutbolBall, faGamepad } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUser, faCog, faMusic, faHeadphones, faPhotoVideo, faVideo, faFutbolBall, faGamepad, faCross, faTimes, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
 import { sidebarContext } from './Home';
 
 const Sidebar = () => {
-    const {setSelectedCategory}=useContext(sidebarContext)
+    const {setSelectedCategory,setSidebarOpen }=useContext(sidebarContext)
   return (
-    <>
+    <div className='sidebar'>
+    <div onClick={()=>setSidebarOpen(prev=>!prev)} style={{ cursor:'pointer',position:'absolute',right:3}}><FontAwesomeIcon icon={faTimes}/></div>
     <h1 style={{marginBottom:'30px'}}>BROS FOR LYF</h1>
-    <div className="sidebar" >
+  <div >
       <div className="sidebar-item" onClick={()=>setSelectedCategory('HOME')} >
         <FontAwesomeIcon style={{marginRight:'6px'}} icon={faHome} />
         <span>Home</span>
@@ -34,7 +35,7 @@ const Sidebar = () => {
         <span>Sports</span>
       </div>
     </div>
-    </>
+    </div>
   );
 }
 

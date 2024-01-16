@@ -99,18 +99,18 @@ const Login = () => {
                     </div>
                     <button type="submit">Login</button>
                     {showOverlay && (
-  <div className={`overlay ${loginStatus === true ? 'success' : 'failure'}`}>
-    <span className="close-btn" onClick={() => setShowOverlay(false)}>×</span>
-    {loginStatus === true ? (
-      <Greentick />
-      
-    ) : (
-      
-      <Cross err={error} />
-      
-    )}
-  </div>
-)}
+                <div className={`overlay ${loginStatus === true ? 'success' : 'failure'}`}>
+                    <span className="close-btn" onClick={() => setShowOverlay(false)}>×</span>
+                    {loginStatus === true ? (
+                    <Greentick />
+                    
+                    ) : (
+                    
+                    <Cross err={error} />
+                    
+                    )}
+                </div>
+                )}
                 </form>
                 <p style={{cursor:'pointer'}}  className="signup-link" onClick={()=>navigate('/signup')}>
                     Don't have an account? <span>Sign up</span>

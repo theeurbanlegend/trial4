@@ -39,7 +39,7 @@ const Signup = () => {
             
         }
 
-        console.log("Submitted")
+
     }
 
   return (
@@ -48,7 +48,7 @@ const Signup = () => {
         <div className="signup-content">
           <form onSubmit={handleSubmit} className="signup-form">
             <div className="signup-group">
-                <h1>Create Account</h1>
+                <h1>Sign up</h1>
               <div className="signup-item">
                 <label htmlFor="fullName">Full Name</label>
                 <input type="text" id="fullName" name="fullName" required value={fullname} onChange={(e)=>setFullname(e.target.value)} />

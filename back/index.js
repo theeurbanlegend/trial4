@@ -40,7 +40,8 @@ app.use('/api/user', userRoute);
 app.use('/api/post', postRoute);
 app.use('/api/chat', chatRouter);
 const rooms = {};
-
+const chatLobby=[]
+const chatRooms={}//id:[users(2)]
 
 io1.on('connection', (socket) => {
   console.log('a user connected');
@@ -48,28 +49,78 @@ io1.on('connection', (socket) => {
   
   //Chat Room events and their listeners
   socket.on('newUserOnline', async({roomName, nickname}) => {
-    const nicknames=await getPeople(io1,roomName)
-    socket.emit('getUsersOnline',{nicknames:nicknames})
+    socket.emit('getUsersOnline',{nicknames:chatLobby})
   });
-  socket.on('join room', ({roomName, nickname}) => {
-    connectToRoom(io1,socket,nickname,roomName)
+  socket.on('join room', ({roomName, userId,senderId, receiverId,sessionId}) => {
+    if(roomName==='chatLobby' && !chatLobby.includes(userId)){
+      chatLobby.push(userId)
+      socket.join('chatLobby')
+    }else{
+      const splitArray = roomName.split(':')
+    const leftSide = splitArray[0];
+    const rightSide = splitArray[1];
+    const inverse=`${rightSide}:${leftSide}`
+      if (chatRooms[roomName]&&!chatRooms[roomName].includes(senderId)) {
+        socket.join(roomName)
+        chatRooms[roomName].push(senderId)
+        
+      }else if(chatRooms[inverse]&&!chatRooms[inverse].includes(senderId)){
+        socket.join(inverse)
+        chatRooms[inverse].push(senderId)
+      
+      }else{
+        chatRooms[roomName] = [senderId];
+        socket.join(roomName)
+       
+      }
+      
+    }
+    
+    //connectToRoom(io1,socket,nickname,roomName)
     
   });
-  socket.on('outofRoom', ({roomName}) => {
+  socket.on('outofRoom', ({roomName,userId}) => {
     disconnectFromRoom(socket,roomName)
-
+    const userIdIndex = chatLobby.indexOf(userId);
+    if (userIdIndex !== -1) {
+      chatLobby.splice(userIdIndex, 1)
+    } 
   });
   socket.on('sendMessage', ({roomName}) => {
-    socket.to(roomName).emit('receivedMessage')
-  });
-  socket.on('getmembers', ({roomName}) => {
-    getPeople(io1,roomName)
+    const splitArray = roomName.split(':')
+    const leftSide = splitArray[0];
+    const rightSide = splitArray[1];
+    const inverse=`${rightSide}:${leftSide}`
+      if (chatRooms[roomName]) {
+        socket.to(roomName).emit('receivedMessage')
+      }else if(chatRooms[inverse]){
+        socket.to(inverse).emit('receivedMessage')
+      }
+    
   });
   socket.on('removeRoom', ({roomName}) => {
-    dismissRoom(io1,roomName)
+     
+    const splitArray = roomName.split(':')
+    const leftSide = splitArray[0];
+    const rightSide = splitArray[1];
+    const inverse=`${rightSide}:${leftSide}`
+      if (chatRooms[roomName]) {
+        dismissRoom(io1,roomName)
+      }else if(chatRooms[inverse]){
+        dismissRoom(io1,inverse)
+      }
   });
-  socket.on('typing', () => {
-    socket.to('chat').emit('userTyping')
+  socket.on('typing', ({roomName}) => {
+    const splitArray = roomName.split(':')
+    const leftSide = splitArray[0];
+    const rightSide = splitArray[1];
+    const inverse=`${rightSide}:${leftSide}`
+      if (chatRooms[roomName]) {
+        socket.to(roomName).emit('userTyping')
+      }else if(chatRooms[inverse]){
+        socket.to(inverse).emit('userTyping')
+      }
+    
   });
   socket.on('disconnect', () => {
     console.log('user disconnected');

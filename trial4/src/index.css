@@ -1,27 +1,31 @@
 /* Login.css */
 html{
   font-family: 'Inter', sans-serif;
+  /* background-color: #252424; */
 }
+
 .home {
   display: flex;
 }
 
 .sidebar {
+  position: absolute;
+  z-index: 999;
+  background-color: rgba(253, 251, 251, 0.952);
+  height: 100vh;
   width: 250px; /* Set an initial width for the sidebar */
-  transition: width 3s ease-in-out; /* Add a smooth transition effect */
+  transition: width 0.3s ease-in-out; /* Add a smooth transition effect */
+}
+.sidebar-closed{
+  width:0;
 }
 .sidebar-item{
   border-top: 1px solid black;
-  margin-left: 10px;
   cursor: pointer;
   padding: 10px;
 }
 .sidebar-item:hover, .sidebar-item:focus{
   font-weight: bolder;
-}
-
-.sidebar-closed {
-  width: 0;
 }
 
 .content {
@@ -74,11 +78,17 @@ html{
 }
 .add-post-container {
   max-width: 600px;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(224, 108, 108, 0.1);
+}
+.svg-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .preview-files {
@@ -199,7 +209,7 @@ html{
 
 .login-container label {
   font-weight: bold;
-}.posts-container
+}
 
 .login-container input {
   padding: 10px;
@@ -395,10 +405,19 @@ p {
   margin-bottom: 8px;
 }
 
-.otp-form input {
-  padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
+.otp-form-group{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.otp-inputbar{
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  text-align: center;
+  margin-right: 10px;
+  font-size: 16px;
+  color: #333;
 }
 
 .otp-actions {
@@ -486,29 +505,7 @@ p {
   justify-content: space-between;
   
 }
-/* .navbar-right .profile-photo{
-  position: relative;
-}
-.nav-overlay {
-  position: absolute;
-  top:0;
-  max-width:300px;
-  max-height: fit-content;
-  z-index: 999;
-  right: 0;
-  margin-top: 40px;
-  width: 100%;
-  padding: 10px;
-  background-color: rgba(245, 242, 242, 0.8);
-  color: #0c0606;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
- .nav-overlay{
-  opacity: 1;
-  visibility: visible;
-} */
+
 .post-plus-btn {
   display: flex;
   cursor: pointer;
@@ -679,11 +676,15 @@ p {
   object-fit: cover;
   object-position: center;
 }
+
 .chat-dash {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-height: 100vh; /* Set maximum height to the viewport height */
+  overflow: hidden; /* Hide overflow content */
 }
+
 
 .content-container {
   display: flex;
@@ -779,11 +780,12 @@ p {
 }
 
 .message-list {
-  background-color: #85b8ee;
+  background-image:url('bkg.jpeg');
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   max-height: 300px;
+  max-width: fit-content;
 }
 
 .talk-bubble {
@@ -791,9 +793,10 @@ p {
   display: inline-block;
   position: relative;
 	width: 200px;
-	height: auto;
+	height: fit-content;
 	background-color: white;
 }
+
 .round{
   border-radius: 30px;
 	-webkit-border-radius: 30px;

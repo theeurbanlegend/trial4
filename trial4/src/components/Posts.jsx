@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Post from './Post';
 import { sidebarContext } from './Home';
+import Loader from './spinners/Loader';
 
 const Posts = () => {
+  //const url='https://api-brosforlyf.onrender.com'
   const url='https://api-brosforlyf.onrender.com'
   const id=localStorage.getItem('id')
   const [obtainedPosts, setObtainedPosts] = useState([]);
@@ -41,7 +43,12 @@ const Posts = () => {
 
   return (
     <div className="posts-container">
-      {loading && <p>Fetching posts...</p>}
+      {loading && (
+        <>
+      <p>Fetching posts...</p>
+      <Loader/>
+      </>
+      )}
       {!loading && obtainedPosts.length === 0 && <p>No posts yet.</p>}
       {!loading && obtainedPosts.map((post) => (
         <Post

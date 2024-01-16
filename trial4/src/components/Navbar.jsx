@@ -4,12 +4,14 @@ import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import { useContext } from 'react';
 import { sidebarContext } from './Home';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faHamburger } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
     const [username,setusername]=useState('')
     const [userId,setuserId]=useState('')
     const navigate=useNavigate()
-    const {selectedCategory}=useContext(sidebarContext)
+    const {selectedCategory,isSidebarOpen,setSidebarOpen}=useContext(sidebarContext)
     const [profilePhotoId,setprofilePhotoId]=useState('')
     useEffect(()=>{
         const getUserData=async()=>{
@@ -37,7 +39,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <span>{selectedCategory}</span>
+        <span><FontAwesomeIcon style={{cursor:'pointer'}} onClick={()=>setSidebarOpen(prev=>!prev)} icon={faBars}/></span>
       </div>
      
       <div className="navbar-right">

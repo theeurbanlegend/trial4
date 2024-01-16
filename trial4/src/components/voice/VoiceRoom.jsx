@@ -4,6 +4,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import SimplePeer from 'simple-peer';
 import io from 'socket.io-client';
 import { Button, Input, Page, Spacer, Text, useToasts } from '@geist-ui/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 // Define a custom hook to generate a random user id
 const useUserId = () => {
@@ -183,6 +186,7 @@ const VoiceRoom = () => {
   // Define the state variables
   const [roomId, setRoomId] = useState('');
   const [joined, setJoined] = useState(false);
+  const navigate= useNavigate()
   //const audio = document.getElementById('playback')
   // Define the custom hooks
   const userId = useUserId();
@@ -226,6 +230,8 @@ const userAudio = useRef();
   // Render the component
   return (
     <Page>
+      <FontAwesomeIcon style={{ position: 'absolute', top: 0, left: 0, marginLeft: '2px', marginTop: '2px' }} onClick={() => navigate('/home')} icon={faArrowLeft} />
+      <Text i>This feature is still under development so it still doesn't work!</Text>
       <Text h1>Simple Voice Room</Text>
       <Text p>User ID: {userId}</Text>
       <audio ref={userAudio} hidden autoPlay id='playback1'></audio>
