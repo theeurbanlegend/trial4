@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Post from './Post';
+import { sidebarContext } from './Home';
 
-const Posts = ({ selectedCategory }) => {
+const Posts = () => {
   const url='https://api-brosforlyf.onrender.com'
+  const id=localStorage.getItem('id')
   const [obtainedPosts, setObtainedPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {selectedCategory}=useContext(sidebarContext)
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -17,9 +20,15 @@ const Posts = ({ selectedCategory }) => {
         }
 
         const data = await response.json();
+        const updated=data.map((post) => {
+          return {
+            ...post,
+            liked:post.likes.includes(id)
+          };
+        })
         // Filter posts based on the selected category
-        //const filteredPosts = data.filter((post) => post.category === selectedCategory);
-        setObtainedPosts(data);
+        const filteredPosts = updated.filter((post) => post.category === selectedCategory);
+        setObtainedPosts(filteredPosts);
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -37,12 +46,14 @@ const Posts = ({ selectedCategory }) => {
       {!loading && obtainedPosts.map((post) => (
         <Post
           key={post._id}
-          id={post.postTitle}
+          id={post._id}
           vidId={post._id}
           datePosted={post.createdAt}
           posterId={post.poster}
           subjectSummary={post.postSummary}
           imageUrl={post.file}
+          likes={post.likes.length}
+          liked={post.liked}
         />
       ))}
     </div>

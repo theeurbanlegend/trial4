@@ -6,7 +6,7 @@ const postSchema = new mongoose.Schema({
   poster: {type:mongoose.Types.ObjectId},
   postTitle:{type:String},
   postSummary:{type:String},
-  likes:{type:String},
+  likes:[{type:String}],
   file: {
     filename: {type:String}
   },

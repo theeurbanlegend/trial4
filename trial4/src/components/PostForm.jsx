@@ -3,14 +3,14 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const AddPost = () => {
-  //const url = 'http://localhost/3001';
+  //const url = 'https://api-brosforlyf.onrender.com';
   const url='https://api-brosforlyf.onrender.com'
   const id = localStorage.getItem('id')
   const navigate=useNavigate()
   const [files, setFiles] = useState(null);
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState('');
-  const [category, setCategory] = useState('NEW');
+  const [category, setCategory] = useState('MOMENTS');
   const [postTitle, setPostTitle] = useState('');
   const [poster, setPoster] = useState('');
   const [postSummary, setPostSummary] = useState('');
@@ -105,7 +105,7 @@ const AddPost = () => {
         setUploadProgress(0);
         setUploadsuccess(true);
         setUploadstatus('Upload Success!!');
-        setCategory('');
+        setCategory('MOMENTS');
         setFiles(null);
         setFileName(null);
         setFileSize(null);
@@ -177,11 +177,12 @@ const AddPost = () => {
         <br />
         <label htmlFor="category">Category:</label>
         <select name="category" id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="NEW">NEW 🔥</option>
+          <option value="MOMENTS">MOMENTS</option>
+          <option value="GAMES">GAMES</option>
           <option value="SPORTS">SPORTS</option>
-          <option value="HOBBIES">HOBBIES</option>
-          <option value="SONGS">SONGS</option>
+          <option value="MUSIC">MUSIC</option>
           <option value="VIDEOS">VIDEOS</option>
+         
         </select>
         <br />
         <label htmlFor="postSummary">Post Summary:</label>

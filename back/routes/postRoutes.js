@@ -1,10 +1,12 @@
-const { getAllPosts,getImage,addPost,getMostRecentPost,getPost,deletePost } = require('../controllers/postControllers')
+const { getAllPosts,getImage,addPost,getMostRecentPost,getPost,deletePost, addLike, removeLike } = require('../controllers/postControllers')
 
 
 const postRoute=require('express').Router()
 
 
 postRoute.get('/posts',getAllPosts)
+postRoute.post('/like/:id',addLike)
+postRoute.post('/unlike/:id',removeLike)
 postRoute.get('/image/:filename',getImage)
 postRoute.post('/new',addPost)
 postRoute.get('/recent',getMostRecentPost)

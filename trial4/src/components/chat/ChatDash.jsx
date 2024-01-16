@@ -147,7 +147,6 @@ if(newSocket){
     useEffect(()=>{
       if(newMessage){
         const fetchNewMessages=()=>{
-          console.log("Received a new message!")
         if (!receivedMessageBlocked) {
           setReceivedMessageBlocked(true);
           if(userSelected){
@@ -176,6 +175,17 @@ if(newSocket){
   const toggleUserList = () => {
     setShowUserList(!showUserList);
   };
+  const formatTimestamp = (timestamp) => {
+    const options = {
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    };
+  
+    const formattedTimestamp = new Date(timestamp).toLocaleString('en-US', options);
+    return formattedTimestamp;
+  };
+  
   const handleLeave=()=>{
     if(newSocket){
       console.log('Offline mode....')
@@ -195,6 +205,7 @@ if(newSocket){
       if(res.data.session.chatReplay.length!==0){
         const messages=res.data.session.chatReplay
         setMessagePreview(messages)
+        
       }
     })
     newSocket.emit('join room', {roomName:'chat', nickname:user.username})
@@ -215,6 +226,7 @@ if(newSocket){
         if(res.data.session.chatReplay.length!==0){
           const messages=res.data.session.chatReplay
           setMessagePreview(messages)
+          
         }
        })
       newSocket.emit('sendMessage',{roomName:'chat'})
@@ -274,6 +286,7 @@ if(newSocket){
                   <div className="talktext">
                     <p>{message.message}</p>
                   </div>
+                  <div>{formatTimestamp(message.timestamp)}</div>
                 </div>
                 )):(<div>{`Start A Chat :)`}</div>)}
               </div>

@@ -8,10 +8,12 @@ const sendemail = require('./mail_api/sendEmail');
 const userRoute = require('./routes/userRoutes');
 const cors = require('cors');
 const connectToRoom = require('./socket/connectToRoom');
+const SimplePeer = require('simple-peer');
 const disconnectFromRoom = require('./socket/disconnectFromRoom');
 const dismissRoom = require('./socket/dismissRoom');
 const getPeople = require('./socket/getPeople');
 const chatRouter = require('./routes/chatRoutes');
+const wrtc = require('wrtc')
 require('dotenv').config();
 
 const app = express();
@@ -28,7 +30,6 @@ const io2 = new Server(server,{
   },
   path:'/voice'
 } )
-
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -84,8 +85,25 @@ io2.on('connection', (socket) => {
     if (!rooms[roomId]) {
       rooms[roomId] = {};
     }
+
+   
+  //   const initiatorPeer = new SimplePeer({ initiator: true ,wrtc:wrtc});
+  //   rooms[roomId] = { initiator: initiatorPeer, participants: {} };
+
+  //   initiatorPeer.on('signal', (signal) => {
+  //     socket.emit('signal', { userId, signal });
+  //   });
+
+  //   rooms[roomId].participants[userId] = initiatorPeer;
+  // })
+  //   socket.on('signal', ({ roomId, userId, signal }) => {
+  //     if (rooms[roomId] && rooms[roomId].participants[userId]) {
+  //       rooms[roomId].participants[userId].signal(signal);
+  //     }
+  //   });
     // Add the user to the room
     rooms[roomId][userId] = socket.id;
+
     // Join the socket.io room
     socket.join(roomId);
     // Broadcast to the other users in the room
@@ -95,6 +113,7 @@ io2.on('connection', (socket) => {
 
   // Relay the signal data
   socket.on('signal', (data) => {
+     console.log(rooms)
     // Find the socket id of the target user
     const socketId = rooms[data.roomId][data.targetId];
     // Emit the signal data to the target user

@@ -1,14 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import videojs from 'video.js';
-import axios from 'axios'
+import axios from 'axios';
 import 'video.js/dist/video-js.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
-const Post = ({ id,vidId, datePosted, posterId, subjectSummary, imageUrl }) => {
+const Post = ({ id, vidId, datePosted, posterId, subjectSummary, imageUrl ,likes,liked}) => {
   const [timeAgo, setTimeAgo] = useState('');
   const [poster, setPoster] = useState('');
+  const [posterprofile, setPosterprofile] = useState('');
+  const [isLiked, setIsLiked] = useState(liked);
+  const [likesNo, setLikesNo] = useState(likes);
+  const userId=localStorage.getItem("id")
   const url = 'https://api-brosforlyf.onrender.com';
-
+  
+  const handleLike=async()=>{
+   if(isLiked){
+    await axios.post(`${url}/api/post/unlike/${id}`,{userId})
+    .then((res)=>{
+      if(res.data.likes){
+        setLikesNo(res.data.likes.length)
+        setIsLiked(false)
+      }
+    })
+    
+  }else{
+    await axios.post(`${url}/api/post/like/${id}`,{userId})
+    .then((res)=>{
+      if(res.data.likes){
+        setLikesNo(res.data.likes.length)
+        setIsLiked(true)
+      }
+    })
+    
+  }
+  }
   useEffect(() => {
     const calculateTimeAgo = () => {
       const now = new Date();
@@ -31,13 +58,13 @@ const Post = ({ id,vidId, datePosted, posterId, subjectSummary, imageUrl }) => {
         setTimeAgo(`${days} day${days > 1 ? 's' : ''} ago`);
       }
     };
-    const getPoster=async()=>{
-      await axios.get(`https://api-brosforlyf.onrender.com/api/user/current/${posterId}`)
-      .then((res)=>{
-        setPoster(res.data.user.username)
-      })
-    }
-    getPoster()
+    const getPoster = async () => {
+      await axios.get(`https://api-brosforlyf.onrender.com/api/user/current/${posterId}`).then((res) => {
+        setPoster(res.data.user.username);
+        setPosterprofile(res.data.user.photo.filename)
+      });
+    };
+    getPoster();
     calculateTimeAgo();
 
     // Refresh the time difference every minute
@@ -54,9 +81,9 @@ const Post = ({ id,vidId, datePosted, posterId, subjectSummary, imageUrl }) => {
     // Initialize video.js for video elements
     if (isVideo) {
       const videoNode = document.createElement('video');
-      const newVidID=document.createAttribute('id')
-      newVidID.value=`video-${vidId}`
-      videoNode.setAttributeNode(newVidID)
+      const newVidID = document.createAttribute('id');
+      newVidID.value = `video-${vidId}`;
+      videoNode.setAttributeNode(newVidID);
       const player = videojs(videoNode);
       return () => {
         if (player) {
@@ -68,12 +95,26 @@ const Post = ({ id,vidId, datePosted, posterId, subjectSummary, imageUrl }) => {
 
   return (
     <div className="post">
+      <div className="post-header-profile">
+        <div><img
+          loading="lazy"
+          src={`${url}/api/user/photo/${posterprofile}`}
+          className="post-header-profile-photo"
+        /></div>
+        <div className='post-author-details'>
+          <div className="post-author">{poster}</div>
+          <div style={{fontSize:'10px'}}>{timeAgo}</div>
+          </div>
+      </div>
+      <div style={{ margin:'10px', textAlign:'start'}}>{subjectSummary}</div>
       <div className="post-content">
+        
         {isVideo ? (
           <video
             id={`video-${vidId}`}
             className="video-js vjs-default-skin"
             controls
+            autoPlay={false}
             width="100%"
             data-setup="{}"
           >
@@ -89,21 +130,18 @@ const Post = ({ id,vidId, datePosted, posterId, subjectSummary, imageUrl }) => {
               className="react-audio-player"
             />
           </div>
-        ) : (
-          <img
-            loading="lazy"
-            src={`${url}/api/post/image/${imageUrl.filename}`}
-            alt={`Post ${vidId}`}
-            className="post-image"
-          />
-        )}
-        <h3 className="post-title">{subjectSummary}</h3>
-        <p className="post-author">By {poster}, {timeAgo}</p>
+        ) : <img
+        loading="lazy"
+        src={`${url}/api/post/image/${imageUrl.filename}`}
+        alt={`Post ${vidId}`}
+        className="post-image"
+      />}
       </div>
+      <br/>
+      <div style={{marginLeft:'5px'}}><FontAwesomeIcon style={{marginLeft:'5px',cursor:'pointer',color:isLiked?`blue`:'black'}} onClick={handleLike} icon={faThumbsUp}/><span style={{marginLeft:'5px'}}>{likesNo}</span> likes</div>
+      
     </div>
   );
-
-  
 };
 
 export default Post;

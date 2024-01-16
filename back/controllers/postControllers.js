@@ -90,58 +90,53 @@ const addPostWithUpload = (req, res, next) => {
 
 const addLike = async(req, res) => {
   const {id}=req.params
+  const {userId}=req.body
     
     if(!id||!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({msg:"no or invalid id!"})
     }
-    const post=await Post.findOne({_id:id})
+    const post= await Post.findById(id)
     if(!post){
         return res.status(404).json({msg:"No post data found!"})
     }
+    const hasLiked=post.likes.includes(userId)
+    if(!hasLiked){
+      post.likes.push(userId)
+    }else{
+      return res.status(400).json({msg:"Already Liked!"})  
+    }
+    await post.save()
     return res.status(200).json(post)
 };
 const removeLike = async(req, res) => {
   const {id}=req.params
-    
+  const {userId}=req.body
     if(!id||!mongoose.Types.ObjectId.isValid(id)){
         return res.status(404).json({msg:"no or invalid id!"})
     }
-    const post=await Post.findOne({_id:id})
+    const post= await Post.findById(id)
     if(!post){
         return res.status(404).json({msg:"No post data found!"})
     }
+    const hasntUnliked = post.likes.includes(userId);
+
+    if (hasntUnliked) {
+      // userId not found in the likes array
+      const userIdIndex = post.likes.indexOf(userId);
+      
+      if (userIdIndex !== -1) {
+        post.likes.splice(userIdIndex, 1); // Remove the userId from the array
+        // Other logic you might want to perform after successfully unliking
+      } 
+    } else {
+      return res.status(400).json({ msg: "Already unliked!" });
+    }
+
+    await post.save()
     return res.status(200).json(post)
 };
 
 
-
-
-// const getPost=async (req,res)=>{
-//     const {id}=req.params
-    
-//     if(!id||!mongoose.Types.ObjectId.isValid(id)){
-//         return res.status(404).json({msg:"no or invalid id!"})
-//     }
-//     const post=await Post.findOne({_id:id})
-//     if(!post){
-//         return res.status(404).json({msg:"No post data found!"})
-//     }
-//     return res.status(200).json(post)
-// }
-// const getMostRecentPost=async (req,res)=>{
-//     const mostRecentEntry = await Post.findOne().sort({ createdAt: -1 }).limit(1)
-
-//     if (mostRecentEntry) {
-//     // The mostRecentEntry variable now contains the most recent document
-    
-//     return res.status(200).json(mostRecentEntry)
-//     } else {
-//     // Handle the case where there are no entries in the collection
-    
-//     return res.status(404).json({msg:"no entries"})
-//     }
-
-// }
 const getAllPosts=async(req,res)=>{
     const posts=await Post.find()
     if(!posts||posts.length===0){

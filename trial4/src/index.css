@@ -2,8 +2,75 @@
 html{
   font-family: 'Inter', sans-serif;
 }
+.home {
+  display: flex;
+}
+
+.sidebar {
+  width: 250px; /* Set an initial width for the sidebar */
+  transition: width 3s ease-in-out; /* Add a smooth transition effect */
+}
+.sidebar-item{
+  border-top: 1px solid black;
+  margin-left: 10px;
+  cursor: pointer;
+  padding: 10px;
+}
+.sidebar-item:hover, .sidebar-item:focus{
+  font-weight: bolder;
+}
+
+.sidebar-closed {
+  width: 0;
+}
+
+.content {
+  flex-grow: 1;
+  overflow: hidden; /* Hide any content that overflows the container */
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  margin: 10px;
+}
+.posts-container {
+  display: grid;
+  gap: 30px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto; 
+}
+.post-header-profile{
+  display: flex;
+  
+  cursor: pointer;
+  justify-content: flex-start;
+}
+.post-header-profile-photo{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 5px;
+  border: 1px solid gray;
+}
+.post{
+  max-width: 300px;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(22, 20, 20, 0.3);
+}
 .post-image{
-  width:50%;
+  width:250px;
+}
+.post-author-details{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.post-author{
+  margin-top:12px;
 }
 .add-post-container {
   max-width: 600px;
@@ -27,14 +94,7 @@ html{
   text-align: center;
   cursor: pointer;
 }
-.post{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 15px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
+
 .post-content{
   display: flex;
   flex-direction: column;
@@ -139,7 +199,7 @@ html{
 
 .login-container label {
   font-weight: bold;
-}
+}.posts-container
 
 .login-container input {
   padding: 10px;
@@ -601,12 +661,6 @@ p {
   border-radius: 4px;
 }
 
-.posts-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  padding:15px;
-  /* Three columns with the first column being 3 times the size of the second column */
-}
 
 
 /* Add any additional styling based on your preferences */

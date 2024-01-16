@@ -26,6 +26,7 @@ const Signup = () => {
                 console.log(res)
                 const id=res.data.id
                 localStorage.setItem("id",id)
+                localStorage.setItem("email",email)
                 setFullname('')
                 setUsername('')
                 setEmail('')

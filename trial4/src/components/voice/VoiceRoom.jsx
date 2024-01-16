@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SimplePeer from 'simple-peer';
 import io from 'socket.io-client';
-import {  Button, Input, Page, Spacer, Text, useToasts } from '@geist-ui/react';
+import { Button, Input, Page, Spacer, Text, useToasts } from '@geist-ui/react';
 
 // Define a custom hook to generate a random user id
 const useUserId = () => {
@@ -19,31 +19,48 @@ const useUserId = () => {
 };
 
 // Define a custom hook to get the user's audio stream
-const useUserMedia = () => {
-  const [stream, setStream] = useState(null);
-
-  useEffect(() => {
-    // Request the user's audio stream
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        setStream(stream);
-        // Log when the microphone captures your voice
-        console.log('Microphone is capturing your voice');
-        
-        // Add the event listener for the onactive event
-        stream.addEventListener('active', () => {
-          console.log('MediaStream is active');
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
-
-  return stream;
-};
-
+const useUserMedia = (audio) => {
+    const [stream, setStream] = useState(null);
+  
+    useEffect(() => {
+      const getStream = async () => {
+        try {
+          // Request the user's audio stream
+          await navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(async(stream)=>{
+            const userMediaStream=stream
+            console.log(stream)
+            if (userMediaStream) {
+              setStream(userMediaStream);
+              audio.srcObject = userMediaStream;
+              
+              // Wait for the audio to be loaded and play it
+              await new Promise((resolve) => {
+                  setStream(userMediaStream)
+                audio.onloadedmetadata = (e) => {
+  
+                  audio.play();
+                  audio.muted = false;
+                  resolve(userMediaStream);
+                };
+              });
+    
+              // Log when the microphone captures your voice
+              console.log('Microphone is capturing your voice');
+            }
+          })
+  
+          
+        } catch (error) {
+          console.error(error);
+        }
+      };
+  
+      getStream();
+    }, [audio]);
+  
+    return stream;
+  };
 // Define a custom hook to create and manage peer connections
 const usePeers = (roomId, userId, stream, socket) => {
   // Define an object to store the peer connections
@@ -58,7 +75,7 @@ const usePeers = (roomId, userId, stream, socket) => {
         initiator: true,
         stream: stream,
       });
-      console.log(peersRef)
+      
       // Add the peer to the peers object
       peersRef.current[userId] = peer;
       // Send the signal data to the server
@@ -69,12 +86,20 @@ const usePeers = (roomId, userId, stream, socket) => {
           data: data,
         });
       });
+
       // Play the remote audio stream
       peer.on('stream', (stream) => {
-        const audio = document.getElementById('playback')
-        console.log(audio)
+        console.log('Streaming 2!',stream)
+        //const audio = document.createElement('audio')
+        const audio = document.getElementById('playback1')
+        //document.body.appendChild(audio);
         audio.srcObject = stream;
-        audio.play();
+        audio.onloadedmetadata = (e) => {
+            console.log('loaded')
+            audio.muted = false;
+            audio.play();
+            
+          };
       });
       // Handle the peer connection error
       peer.on('error', (error) => {
@@ -96,7 +121,6 @@ const usePeers = (roomId, userId, stream, socket) => {
 
     // Handle the signal event
     const handleSignal = (data) => {
-        console.log(data)
       // Find the peer connection
       const peer = peersRef.current[data.userId];
       if (peer) {
@@ -114,7 +138,6 @@ const usePeers = (roomId, userId, stream, socket) => {
         peer.signal(data.data);
         // Send the signal data to the server
         peer.on('signal', (data) => {
-            console.log(data)
           socket.emit('signal', {
             roomId: roomId,
             targetId: data.userId,
@@ -123,12 +146,14 @@ const usePeers = (roomId, userId, stream, socket) => {
         });
         // Play the remote audio stream
         peer.on('stream', (stream) => {
-            console.log(stream)
-            const audio = document.getElementById('playback')
-            console.log(audio)
+            console.log("Streaming 1",stream)
+            const audio = document.getElementById('playback2')
           audio.srcObject = stream;
-          audio.play();
-
+          audio.onloadedmetadata = (e) => {
+            console.log('loaded!')
+            audio.muted = false;
+            audio.play();
+          };
         });
         // Handle the peer connection error
         peer.on('error', (error) => {
@@ -146,7 +171,7 @@ const usePeers = (roomId, userId, stream, socket) => {
     return () => {
       socket.off('user-joined', handleUserJoined);
       socket.off('user-left', handleUserLeft);
-      socket.off('signal', handleSignal);
+      socket.off('signal',handleSignal);
     };
   }, [roomId, userId, stream, socket]);
 
@@ -158,9 +183,10 @@ const VoiceRoom = () => {
   // Define the state variables
   const [roomId, setRoomId] = useState('');
   const [joined, setJoined] = useState(false);
-
+  //const audio = document.getElementById('playback')
   // Define the custom hooks
   const userId = useUserId();
+const userAudio = useRef(); 
   const stream = useUserMedia();
   const socket = useRef(io('https://api-brosforlyf.onrender.com',{path:'/voice'})).current;
   const peersRef = usePeers(roomId, userId, stream, socket);
@@ -202,7 +228,9 @@ const VoiceRoom = () => {
     <Page>
       <Text h1>Simple Voice Room</Text>
       <Text p>User ID: {userId}</Text>
-      <audio id='playback'> <source/></audio> */
+      <audio ref={userAudio} hidden autoPlay id='playback1'></audio>
+      <audio ref={userAudio} hidden autoPlay id='playback2'></audio>
+      
       <Spacer />
       {joined ? (
         <Button type="error" onClick={handleLeaveRoom}>
