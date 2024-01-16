@@ -780,7 +780,7 @@ p {
 }
 
 .message-list {
-  background-image:url('bkg.jpeg');
+  background-image:url('./assets/bkg.jpeg');
   display: flex;
   flex-direction: column;
   overflow-y: auto;
