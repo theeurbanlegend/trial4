@@ -62,7 +62,7 @@ const addPost = async (req, res) => {
       poster,
       postTitle,
       postSummary,
-      likes:0,
+      likes:[],
       file: { filename: file.originalname },
       category,
     });
