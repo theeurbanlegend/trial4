@@ -20,13 +20,13 @@ const app = express();
 const server = http.createServer(app);
 const io1 = new Server(server,{
   cors:{
-    origin:'https://brosforlyf.onrender.com'
+    origin:'http://localhost:5173'
   },
   path:'/chat'
 } )
 const io2 = new Server(server,{
   cors:{
-    origin:'https://brosforlyf.onrender.com'
+    origin:'http://localhost:5173'
   },
   path:'/voice'
 } )
@@ -129,77 +129,77 @@ io1.on('connection', (socket) => {
 });
 
 io2.on('connection', (socket) => {
-  //VoiceRoom events and their listeners
-  // Join a room
-  socket.on('join-voice', (roomId, userId) => {
-    // Create the room if it does not exist
-    if (!rooms[roomId]) {
-      rooms[roomId] = {};
-    }
+  console.log('a user connected');
+  // //VoiceRoom events and their listeners
+  // // Join a room
+  // socket.on('join-voice', (roomId, userId) => {
+  //   // Create the room if it does not exist
+  //   if (!rooms[roomId]) {
+  //     console.log("Adding new Room!")
+  //     rooms[roomId] = {};
+  //   }
+  //   // Add the user to the room
+  //   rooms[roomId][userId] = socket.id;
 
-   
-  //   const initiatorPeer = new SimplePeer({ initiator: true ,wrtc:wrtc});
-  //   rooms[roomId] = { initiator: initiatorPeer, participants: {} };
+  //   // Join the socket.io room
+  //   socket.join(roomId);
+  //   // Broadcast to the other users in the room
+  //   io2.to(roomId).emit('user-joined', userId);
+  //   console.log('User ' + userId + ' joined room ' + roomId);
+  // });
+  // // Relay the signal data
+  // socket.on('signal', (data) => {
+  //   console.log(data.roomId,"+", data.targetId)
+  //   // Find the socket id of the target user
+  //   const socketId = rooms[data.roomId][data.targetId];
+  //   // Emit the signal data to the target user
+  //   io2.to(socketId).emit('signal', data);
+  // });
 
-  //   initiatorPeer.on('signal', (signal) => {
-  //     socket.emit('signal', { userId, signal });
-  //   });
+  // // Leave a room
+  // socket.on('leave-voice', (roomId, userId) => {
+  //   // Remove the user from the room
+  //   delete rooms[roomId][userId];
+  //   // Leave the socket.io room
+  //   socket.leave(roomId);
+  //   // Broadcast to the other users in the room
+  //   io2.to(roomId).emit('user-left', userId);
+  //   console.log('User ' + userId + ' left room ' + roomId);
+  // });
 
-  //   rooms[roomId].participants[userId] = initiatorPeer;
-  // })
-  //   socket.on('signal', ({ roomId, userId, signal }) => {
-  //     if (rooms[roomId] && rooms[roomId].participants[userId]) {
-  //       rooms[roomId].participants[userId].signal(signal);
+  // // Handle disconnection
+  // socket.on('disconnect', () => {
+  //   console.log('A user disconnected: ' + socket.id);
+  //   // Find the room and the user that the socket belongs to
+  //   for (const roomId in rooms) {
+  //     for (const userId in rooms[roomId]) {
+  //       if (rooms[roomId][userId] === socket.id) {
+  //         // Remove the user from the room
+  //         delete rooms[roomId][userId];
+  //         // Leave the socket.io room
+  //         socket.leave(roomId);
+  //         // Broadcast to the other users in the room
+  //         socket.to(roomId).emit('user-left', userId);
+  //         console.log('User ' + userId + ' left room ' + roomId);
+  //       }
   //     }
-  //   });
-    // Add the user to the room
-    rooms[roomId][userId] = socket.id;
+  //   }
+  // })
+  socket.emit("me", socket.id)
 
-    // Join the socket.io room
-    socket.join(roomId);
-    // Broadcast to the other users in the room
-    socket.to(roomId).emit('user-joined', userId);
-    console.log('User ' + userId + ' joined room ' + roomId);
-  });
+	socket.on("disconnect", () => {
+		socket.broadcast.emit("callEnded")
+	})
 
-  // Relay the signal data
-  socket.on('signal', (data) => {
-     console.log(rooms)
-    // Find the socket id of the target user
-    const socketId = rooms[data.roomId][data.targetId];
-    // Emit the signal data to the target user
-    io2.to(socketId).emit('signal', data);
-  });
+	socket.on("callUser", (data) => {
+    console.log(data)
+		io2.to(data.userToCall).emit("callUser", { signal: data.signalData, from: data.from, name: data.name })
+	})
 
-  // Leave a room
-  socket.on('leave-voice', (roomId, userId) => {
-    // Remove the user from the room
-    delete rooms[roomId][userId];
-    // Leave the socket.io room
-    socket.leave(roomId);
-    // Broadcast to the other users in the room
-    socket.to(roomId).emit('user-left', userId);
-    console.log('User ' + userId + ' left room ' + roomId);
-  });
-
-  // Handle disconnection
-  socket.on('disconnect', () => {
-    console.log('A user disconnected: ' + socket.id);
-    // Find the room and the user that the socket belongs to
-    for (const roomId in rooms) {
-      for (const userId in rooms[roomId]) {
-        if (rooms[roomId][userId] === socket.id) {
-          // Remove the user from the room
-          delete rooms[roomId][userId];
-          // Leave the socket.io room
-          socket.leave(roomId);
-          // Broadcast to the other users in the room
-          socket.to(roomId).emit('user-left', userId);
-          console.log('User ' + userId + ' left room ' + roomId);
-        }
-      }
-    }
-  })
+	socket.on("answerCall", (data) => {
+    console.log(data)
+		io2.to(data.to).emit("callAccepted", data.signal)
+	})
 })
 
 server.listen(process.env.PORT, () => {

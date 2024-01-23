@@ -664,6 +664,7 @@ p {
 
 
 .profile-avatar{
+  position: relative;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -696,7 +697,7 @@ p {
   
   border-right: 1px solid #ccc;
   height:80vh;
-  overflow: hidden;
+  overflow: scroll;
   transition: width 0.3s ease-in-out;
 }
 
@@ -742,6 +743,7 @@ p {
   justify-content: flex-start;
 }
 
+
 .user-avatar {
   
   width: 40px;
@@ -752,6 +754,7 @@ p {
 
 .status-indicator {
   position: absolute;
+  z-index: 999;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -873,3 +876,47 @@ p {
   padding: 5px;
   cursor: pointer;
 }
+
+
+/* Copied CSS */
+.container {
+	display: flex;
+  flex-direction: column;
+}
+
+.myId {
+	margin-right: 5rem;
+	border-radius: 5px;
+	background: #c9d6ff; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #e2e2e2, #c9d6ff); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+		to right,
+		#e2e2e2,
+		#c9d6ff
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+	padding: 2rem;
+	display: grid;
+	justify-content: center;
+	align-content: center;
+}
+
+.call-button {
+	text-align: center;
+	margin-top: 2rem;
+}
+
+.video-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	justify-content: center;
+	align-content: center;
+	margin-top: 10rem;
+	margin-left: 10rem;
+}
+
+.caller {
+	text-align: center;
+	color: #fff;
+}
+
