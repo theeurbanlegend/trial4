@@ -261,7 +261,7 @@ function VoiceRoom() {
 	const connectionRef= useRef()
 
 	useEffect(() => {
-		navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+		navigator.mediaDevices.getUserMedia({ video: false, audio: true }).then((stream) => {
 			setStream(stream)
 				myVideo.current.srcObject = stream
 		})
@@ -335,11 +335,11 @@ function VoiceRoom() {
 		<div className="container">
 			<div className="video-container">
 				<div className="video">
-					{stream &&  <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
+					{stream &&  <audio playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
 				</div>
 				<div className="video">
 					{callAccepted && !callEnded ?
-					<video playsInline ref={userVideo} autoPlay style={{ width: "300px"}} />:
+					<audio playsInline ref={userVideo} autoPlay style={{ width: "300px"}} />:
 					null}
 				</div>
 			</div>
