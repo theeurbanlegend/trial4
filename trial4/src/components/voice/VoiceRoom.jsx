@@ -245,7 +245,7 @@ import Peer from "simple-peer"
 import io from "socket.io-client"
 
 
-const socket = io('ws://localhost:3001',{path:'/voice'})
+const socket = io('https://api-brosforlyf.onrender.com',{path:'/voice'})
 function VoiceRoom() {
 	const [ me, setMe ] = useState("")
 	const [ stream, setStream ] = useState()
@@ -267,7 +267,6 @@ function VoiceRoom() {
 		})
 
 	socket.on("me", (id) => {
-    console.log("Got id", id)
 			setMe(id)
 		})
 

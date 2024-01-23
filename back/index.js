@@ -26,7 +26,7 @@ const io1 = new Server(server,{
 } )
 const io2 = new Server(server,{
   cors:{
-    origin:'http://localhost:5173'
+    origin:'https://brosforlyf.onrender.com'
   },
   path:'/voice'
 } )
