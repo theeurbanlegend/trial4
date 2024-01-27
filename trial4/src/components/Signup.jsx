@@ -3,27 +3,32 @@ import React,{useState} from "react";
 import axios from "axios";
 import "../App.css";
 import { useNavigate } from "react-router-dom";
+import Loader from "./spinners/Loader";
 
 const Signup = () => {
     const navigate= useNavigate()
     const [fullname, setFullname]=useState('')
+    const [sending, setsending]=useState(false)
     const [username, setUsername]=useState('')
     const [email, setEmail]=useState('')
     const [password, setPassword]=useState('')
-    
+    const url='https://api-brosforlyf.onrender.com'
 
     const handleSubmit = async (e) => {
+      setsending(true)
+      
         e.preventDefault();
         
-        if(!fullname||!username||!email||!password){
+        if(!username||!email||!password){
+          setsending(false)
             return
         }
-        const signupData={fullname,username,email,password}
+        const signupData={fullname:username,username:username.trim(),email:email.trim(),password}
 
         try{
-            await axios.post('https://api-brosforlyf.onrender.com/api/user/register', signupData)
+            await axios.post(`${url}/api/user/register`, signupData)
             .then((res)=>{
-                console.log(res)
+              setsending(false)
                 const id=res.data.id
                 localStorage.setItem("id",id)
                 localStorage.setItem("email",email)
@@ -31,8 +36,9 @@ const Signup = () => {
                 setUsername('')
                 setEmail('')
                 setPassword('')
-                navigate('/otp')
+                navigate('/photo')
             })
+
         }
         catch(err){
             console.log(err)
@@ -44,33 +50,35 @@ const Signup = () => {
 
   return (
     <div className="signup-container">
+      {sending&&<div className="overlay">
+      <div>Creating your account</div>
+      <Loader/>
+      </div>}
       <div className="signup-wrapper">
         <div className="signup-content">
           <form onSubmit={handleSubmit} className="signup-form">
             <div className="signup-group">
                 <h1>Sign up</h1>
               <div className="signup-item">
-                <label htmlFor="fullName">Full Name</label>
-                <input type="text" id="fullName" name="fullName" required value={fullname} onChange={(e)=>setFullname(e.target.value)} />
-              </div>
-              <div className="signup-item">
                 <label htmlFor="username">Username</label>
-                <input type="text" id="username" name="username" required value={username} onChange={(e)=>setUsername(e.target.value)}/>
+                <input type="text" id="username" name="username" 
+                placeholder='Create a unique username, like your name'
+                required value={username} onChange={(e)=>setUsername(e.target.value)}/>
               </div>
 
               <div className="signup-item">
                 <label htmlFor="email">Email Address</label>
-                <input type="email" id="email" name="email" required value={email} onChange={(e)=>setEmail(e.target.value)}/>
+                <input type="email" id="email" name="email" placeholder="eg: comrade @gmail.com" required value={email} onChange={(e)=>setEmail(e.target.value)}/>
               </div>
 
               <div className="signup-item">
                 <label htmlFor="password">Password</label>
-                <input type="password" id="password" name="password" required value={password} onChange={(e)=>setPassword(e.target.value)}/>
+                <input type="password"  id="password" name="password" required value={password} onChange={(e)=>setPassword(e.target.value)}/>
               </div>
             </div>
 
             <div className="signup-actions">
-              <button type="submit" className="signup-button">Create Account</button>
+              <button type="submit" style={{backgroundColor:sending&&'lightblue'}} disabled={sending}className="signup-button">Create Account</button>
             </div>
           </form>
 

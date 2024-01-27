@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import Cross from './spinners/Cross';
 import Greentick from './spinners/Greentick';
 import axios from 'axios'
+import Loader from './spinners/Loader';
 
 const Login = () => {
     const navigate= useNavigate()
@@ -15,16 +16,19 @@ const Login = () => {
     const [displayusererror, setDisplayusererror]=useState(false)
     const [displaypassError, setDisplaypassError]=useState(false)
     const [password, setPassword]=useState('')
+    const [sending, setSending]=useState(false)
     const [usernameOrEmail, setUsernameOrEmail]=useState('')
     const [loginStatus, setLoginStatus] = useState(null); // New state for login status
+    const url='https://api-brosforlyf.onrender.com'
+
 
 
     const handleSubmit = async (e) => {
+        setSending(true)
         e.preventDefault();
         
         setLoginStatus(null); // Reset login status
         let loginData
-        e.preventDefault()
         if(!usernameOrEmail){
             setUsernameerror("*The username is required")
             setDisplayusererror(true)
@@ -41,17 +45,18 @@ const Login = () => {
         const isEmail = emailRegex.test(usernameOrEmail);
         if (isEmail){
             setEmail(usernameOrEmail)
-            loginData={email:usernameOrEmail,password:password}
+            loginData={email:usernameOrEmail.trim(),password:password}
         }else{
             setUsername(usernameOrEmail)
-            loginData={username:usernameOrEmail,password:password}
+            loginData={username:usernameOrEmail.trim(),password:password}
         }
         try{
-            await axios.post('https://api-brosforlyf.onrender.com/api/user/login', loginData)
+            await axios.post(`${url}/api/user/login`, loginData)
             .then((res)=>{
                 const id=res.data.id
                 setShowOverlay(true); // Show overlay on form submission
                 setLoginStatus(true); // Login successful
+                setSending(false)
                 setUsernameOrEmail('')
                 setUsername('')
                 setEmail('')
@@ -66,15 +71,22 @@ const Login = () => {
         catch(err){
             console.log(err)
             setShowOverlay(true); // Show overlay on form submission
+            setSending(false)
             setLoginStatus(false); // Login successful
             setError(err.response.data.msg)
             setTimeout(()=>setShowOverlay(false),3000)
         }
 
-        console.log("Submitted")
+       
     }
     return (
         <div className="login-container">
+            {sending&&
+            <div className='overlay'>
+            <p>Looking for you...</p>
+            <Loader/>
+            </div>
+            }
             <div className="login-content">
                 <div className="login-header">
                     <h1>Login</h1>
@@ -97,7 +109,7 @@ const Login = () => {
                         />
                         {displaypassError &&(<div style={{color:'red',fontSize:'small', position:'absolute', left:0}}>{passworderror}</div>)}
                     </div>
-                    <button type="submit">Login</button>
+                    <button disabled={sending} type="submit">Login</button>
                     {showOverlay && (
                 <div className={`overlay ${loginStatus === true ? 'success' : 'failure'}`}>
                     <span className="close-btn" onClick={() => setShowOverlay(false)}>×</span>

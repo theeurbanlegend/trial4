@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 const ProfilePhotoForm = ({ onSkip, onSave }) => {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [previewURL, setPreviewURL] = useState(null);
+  const url='https://api-brosforlyf.onrender.com'
+
   const navigate=useNavigate()
 
   const handlePhotoChange = (e) => {
@@ -36,7 +38,7 @@ const ProfilePhotoForm = ({ onSkip, onSave }) => {
     formData.append('id', id); // Replace with actual username
     formData.append('photo', selectedPhoto);
     try{
-        await axios.post('https://api-brosforlyf.onrender.com/api/user/add', formData)
+        await axios.post(`${url}/api/user/add`, formData)
         .then((res)=>{
             console.log(res)
             navigate('/home')

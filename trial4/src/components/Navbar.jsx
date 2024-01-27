@@ -4,8 +4,7 @@ import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import { useContext } from 'react';
 import { sidebarContext } from './Home';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faHamburger } from '@fortawesome/free-solid-svg-icons';
+
 
 const Navbar = () => {
     const [username,setusername]=useState('')
@@ -13,6 +12,8 @@ const Navbar = () => {
     const navigate=useNavigate()
     const {selectedCategory,isSidebarOpen,setSidebarOpen}=useContext(sidebarContext)
     const [profilePhotoId,setprofilePhotoId]=useState('')
+    const url='https://api-brosforlyf.onrender.com'
+
     useEffect(()=>{
         const getUserData=async()=>{
             try{
@@ -22,15 +23,15 @@ const Navbar = () => {
                 navigate('/login')
               }
               setuserId(id)
-                await axios.get(`https://api-brosforlyf.onrender.com/api/user/current/${id}`)
+                await axios.get(`${url}/api/user/current/${id}`)
                 .then((res)=>{
-                  
                   setusername(res.data.user.username)
                   setprofilePhotoId(res.data.user.photo.filename)
                 })
             }
             catch(err){
-                console.log(err)
+              if(err.response.data.msg==='User Not found!') navigate('/login')
+              console.log(err)
             }
         }
         getUserData()
@@ -38,8 +39,11 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
+      <div className="scroll-msg">Currently the huddle and rest of the UI are still in progress meanwhile enjoy the app.</div>
+      <div className="navbar-main">
       <div className="navbar-left">
-        <span><FontAwesomeIcon style={{cursor:'pointer'}} onClick={()=>setSidebarOpen(prev=>!prev)} icon={faBars}/></span>
+        <span style={{cursor:'pointer'}} onClick={()=>setSidebarOpen(prev=>!prev)}>Bros For Life</span>
+        {/* <span><FontAwesomeIcon style={{cursor:'pointer'}} onClick={()=>setSidebarOpen(prev=>!prev)} icon={faBars}/></span> */}
       </div>
      
       <div className="navbar-right">
@@ -51,9 +55,10 @@ const Navbar = () => {
         </div>
         
         <div className="profile-photo">
-          <img src={`https://api-brosforlyf.onrender.com/api/user/photo/${profilePhotoId}`||'user.jpg'} alt="Profile" title={username} onClick={()=>navigate(`/profile/${userId}`)}/>
+          <img src={`${url}/api/user/photo/${profilePhotoId}`||'user.jpg'} alt="Profile" title={username} onClick={()=>navigate(`/profile/${userId}`)}/>
           
         </div>
+      </div>
       </div>
     </nav>
   );

@@ -12,6 +12,8 @@ const OtpForm = () => {
   const [otp6, setOtp6] = useState('');
   const navigate = useNavigate();
   const email = localStorage.getItem('email');
+  const url='https://api-brosforlyf.onrender.com'
+
   useEffect(() => {
     const handleInputBarChange = (e) => {
       const { value, name } = e.target;
@@ -41,8 +43,6 @@ const OtpForm = () => {
     return () => {
       document.querySelectorAll('.otp-inputbar').forEach((inputBar) => {
         inputBar.removeEventListener('keyup', handleInputBarChange);
-        inputBar.removeEventListener('keydown', handleInputBarChange);
-        inputBar.removeEventListener('keypress', handleInputBarChange);
       });
     };
   }, []); // Empty dependency array to ensure the effect runs only once on mount
@@ -84,9 +84,8 @@ const OtpForm = () => {
 
     const otpData = { id, otp };
     try {
-      await axios.post('https://api-brosforlyf.onrender.com/api/user/verify', otpData).then((res) => {
+      await axios.post(`${url}/api/user/verify`, otpData).then((res) => {
         // Handle successful verification, navigation, and any additional logic
-        console.log('Verification successful:', res.data);
         setOtp1('');
         setOtp2('');
         setOtp3('');

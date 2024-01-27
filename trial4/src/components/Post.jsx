@@ -13,7 +13,8 @@ const Post = ({ id, vidId, datePosted, posterId, subjectSummary, imageUrl ,likes
   const [isLiked, setIsLiked] = useState(liked);
   const [likesNo, setLikesNo] = useState(likes);
   const userId=localStorage.getItem("id")
-  const url = 'https://api-brosforlyf.onrender.com';
+  const url='https://api-brosforlyf.onrender.com'
+
   
   const handleLike=async()=>{
    if(isLiked){
@@ -59,7 +60,7 @@ const Post = ({ id, vidId, datePosted, posterId, subjectSummary, imageUrl ,likes
       }
     };
     const getPoster = async () => {
-      await axios.get(`https://api-brosforlyf.onrender.com/api/user/current/${posterId}`).then((res) => {
+      await axios.get(`${url}/api/user/current/${posterId}`).then((res) => {
         setPoster(res.data.user.username);
         setPosterprofile(res.data.user.photo.filename)
       });

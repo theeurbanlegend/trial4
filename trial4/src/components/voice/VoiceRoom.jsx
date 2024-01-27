@@ -167,7 +167,7 @@
 //   const userId = useUserId();
 // const userAudio = useRef(); 
 //   const stream = useUserMedia();
-//   //const socket = useRef(io('http://localhost:3001',{path:'/voice'})).current;
+//   //const socket = useRef(io('https://api-brosforlyf.onrender.com',{path:'/voice'})).current;
 //   const socket = useRef(io('ws://localhost:3001',{path:'/voice'})).current;
 //   const peersRef = usePeers(roomId, userId, stream, socket);
 //   const [,setToast] = useToasts();
@@ -243,11 +243,13 @@ import React, { useEffect, useRef, useState } from "react"
 
 import Peer from "simple-peer"
 import io from "socket.io-client"
+import { useNavigate } from 'react-router-dom';
 
 
 const socket = io('https://api-brosforlyf.onrender.com',{path:'/voice'})
 function VoiceRoom() {
 	const [ me, setMe ] = useState("")
+	const navigate= useNavigate()
 	const [ stream, setStream ] = useState()
 	const [ receivingCall, setReceivingCall ] = useState(false)
 	const [ caller, setCaller ] = useState("")
@@ -279,7 +281,6 @@ function VoiceRoom() {
 	}, [])
 
 	const callUser = (id) => {
-    console.log(id)
 		const peer = new Peer({
 			initiator: true,
 			trickle: false,
@@ -331,11 +332,15 @@ function VoiceRoom() {
 
 	return (
 		<>
+		<FontAwesomeIcon style={{ position: 'absolute', top: 0, left: 0, marginLeft: '2px', marginTop: '2px' }} onClick={() => navigate('/home')} icon={faArrowLeft} />
+      
+		
 			<h1 style={{ textAlign: "center", color: 'black' }}>Zoomish</h1>
+			<Text i style={{opacity:'50%'}}>This feature is still under development so it still doesn't work!</Text>
 		<div className="container">
 			<div className="video-container">
 				<div className="video">
-					{stream &&  <audio playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
+					
 				</div>
 				<div className="video">
 					{callAccepted && !callEnded ?
@@ -373,7 +378,7 @@ function VoiceRoom() {
 			</div>
 			<div>
 				{receivingCall && !callAccepted ? (
-						<div className="caller">
+						<div className="caller overlay">
 						<h1 >{name} is calling...</h1>
 						<Button variant="contained" color="primary" onClick={answerCall}>
 							Answer

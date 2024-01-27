@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const AddPost = () => {
-  //const url = 'https://api-brosforlyf.onrender.com';
   const url='https://api-brosforlyf.onrender.com'
+  //const url='https://api-brosforlyf.onrender.com'
   const id = localStorage.getItem('id')
   const navigate=useNavigate()
   const [files, setFiles] = useState(null);

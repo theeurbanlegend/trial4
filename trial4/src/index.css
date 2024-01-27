@@ -1,16 +1,79 @@
 /* Login.css */
 html{
   font-family: 'Inter', sans-serif;
-  /* background-color: #252424; */
+  margin:0;
+  padding:0;
+  
 }
-
+body{
+  margin: 0;
+  padding: 0;
+  background-image: linear-gradient(to left, rgba(7, 7, 184, 0.705), rgba(194, 135, 135, 0.842));
+}
 .home {
   display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  
+  
+}
+
+.fade-in-out {
+  color:brown;
+  opacity: 1; 
+  animation: fadeInOut 2s ease-in-out infinite; 
+  animation-direction: alternate;
+}
+
+
+@keyframes fadeInOut {
+  from {opacity: 1;}
+  to {opacity: 0;}
+}
+
+.landing-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns of equal width */
+  grid-template-rows: auto auto;
+}
+
+.landing-item{
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  margin:10px;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(22, 20, 20, 0.3);
+}
+.landing-item p{
+  font-size: 1.25em;
+  padding-left: 10px;
+}
+.landing-item-icon{
+  color: rgb(226, 219, 219);
+  margin-top: 12px;
+  font-size: 100px;
+}
+@media screen and (max-width: 768px) {
+  .landing-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 500px;
+  }
+  .landing-item{
+    
+    display: flex;
+    flex-direction: column;
+    
+  }
 }
 
 .sidebar {
   position: absolute;
-  z-index: 999;
+  z-index: 1000;
   background-color: rgba(253, 251, 251, 0.952);
   height: 100vh;
   width: 250px; /* Set an initial width for the sidebar */
@@ -30,6 +93,7 @@ html{
 
 .content {
   flex-grow: 1;
+  margin-top: 120px;
   overflow: hidden; /* Hide any content that overflows the container */
 }
 
@@ -117,7 +181,6 @@ html{
 .drop-zone p {
   margin: 0;
 }
-.user-profile
 .drop-zone:hover {
   border-color: #4caf50;
 }
@@ -318,7 +381,7 @@ html{
   }
 }
 
-p {
+.greentick p {
   text-align: center;
   margin: 20px 0 60px;
   font-size: 1.25em;
@@ -487,15 +550,42 @@ p {
 
 /* Add these styles to your CSS file */
 .navbar {
+  background-color:rgb(109, 109, 209);
+  padding: 10px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 999;
+  box-shadow: 0 0 10px rgba(22, 20, 20, 0.3);
+}
+
+.scroll-msg {
+  max-width: 100vw;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: marquee 20s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+.navbar-main {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #007bff;
-  color: white;
+  color: black;
 }
 
 .navbar-left {
+  font-weight: bolder;
   flex: 1;
 }
 
@@ -680,6 +770,7 @@ p {
 
 .chat-dash {
   display: flex;
+  
   flex-direction: column;
   align-items: center;
   max-height: 100vh; /* Set maximum height to the viewport height */
@@ -700,7 +791,7 @@ p {
   overflow: scroll;
   transition: width 0.3s ease-in-out;
 }
-
+.message-preview
 .user-list-content {
   padding: 10px;
 }
@@ -772,6 +863,7 @@ p {
 .message-preview {
   
   z-index: 999;
+  
   flex-grow: 1;
   padding: 10px;
 }

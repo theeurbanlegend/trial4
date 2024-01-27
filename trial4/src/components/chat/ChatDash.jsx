@@ -3,7 +3,8 @@ import io from 'socket.io-client';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import Messages from './Messages';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPaperPlane, faTimes } from '@fortawesome/free-solid-svg-icons';
+//import {} from 'font-awesome'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const ChatDash = () => {
   const navigate=useNavigate()
@@ -23,6 +24,8 @@ const ChatDash = () => {
   const [newSocket, setNewSocket]=useState(null)
   const [obtainedNicknames,setObtainedNicknames]=useState([])
   const [typing, setTyping] = useState(false);
+  const url='https://api-brosforlyf.onrender.com'
+
   let typingTimeout;
 if(newSocket){
   newSocket.on('userTyping', () => {
@@ -40,7 +43,7 @@ if(newSocket){
     const connectToBack = async () => {
       return new Promise((resolve) => {
         // Connect to the Socket.IO server
-        const socket = io('https://api-brosforlyf.onrender.com',{path:'/chat'});
+        const socket = io(url,{path:'/chat'});
 
         // Event handler for connection
         socket.on('connect', () => {
@@ -62,7 +65,7 @@ if(newSocket){
     
 
     const fetchUsers = async (socket) => {
-      const res = await axios.get('https://api-brosforlyf.onrender.com/api/user/all');
+      const res = await axios.get(`${url}/api/user/all`);
       const excludedCurrent = res.data.filter((user) => user._id !== id);
       const includeedCurrent = res.data.filter((user) => user._id === id);
 
@@ -78,7 +81,7 @@ if(newSocket){
         return {
           ...user,
           online: obtainedNicknames.includes(user._id),
-          imageUrl: `https://api-brosforlyf.onrender.com/api/user/photo/${user.photo.filename}`,
+          imageUrl: `${url}/api/user/photo/${user.photo.filename}`,
         };
       });
 
@@ -160,7 +163,7 @@ if(newSocket){
           if(userSelected){
           const sessionId = `${id}:${userSelected._id}`;
           setTimeout(async()=>{
-          await axios.get(`https://api-brosforlyf.onrender.com/api/chat/get/${sessionId}`).then((res) => {
+          await axios.get(`${url}/api/chat/get/${sessionId}`).then((res) => {
             if (res.data.session.chatReplay.length !== 0) {
               const messages = res.data.session.chatReplay;
               setMessagePreview(messages);
@@ -206,7 +209,7 @@ if(newSocket){
     const sessionId=`${id}:${user._id}`
     const senderId=id
     const receiverId=user._id
-    await axios.post('https://api-brosforlyf.onrender.com/api/chat/add',{sessionId,senderId,receiverId}).then((res)=>{
+    await axios.post(`${url}/api/chat/add`,{sessionId,senderId,receiverId}).then((res)=>{
       
       if(res.data.session.chatReplay.length!==0){
         const messages=res.data.session.chatReplay
@@ -227,7 +230,7 @@ if(newSocket){
       const sessionId=`${id}:${userSelected._id}`
       const senderId=id
       const receiverId=userSelected._id
-      await axios.post(`https://api-brosforlyf.onrender.com/api/chat/update/${sessionId}`,{sessionId,senderId,receiverId, message:inputMessage})
+      await axios.post(`${url}/api/chat/update/${sessionId}`,{sessionId,senderId,receiverId, message:inputMessage})
       .then((res)=>{
         
         if(res.data.session.chatReplay.length!==0){
@@ -267,9 +270,10 @@ if(newSocket){
             )):(<div>No comrades To display!</div>)}
           </div>
         </div>
-        {userIsSelected ?
+        {userIsSelected &&
         (
-        <div className="message-preview">
+        <div className="message-preview overlay">
+          <div style={{position:'absolute', cursor:'pointer', top:3,right:3}} onClick={()=>setUserIsSelected(false)}><FontAwesomeIcon icon={faTimes}/></div>
         <div className="message-header">
         <div className="user-header">
           <div className='profile'>
@@ -285,17 +289,20 @@ if(newSocket){
             <div style={{fontSize:"small", fontWeight:'lighter', marginLeft:'50px'}}>{typing?"typing....":''}</div> 
             </div>
         </div>
-              <div className="message-list" ref={messageListRef}>
-                {messagePreview.length>0 ?messagePreview.map((message) => (
+             
+                {messagePreview.length>0 ?
+                 (<div className="message-list"  ref={messageListRef}>{
+                messagePreview.map((message) => (
                   <div key={message._id} className={message.senderId==userSelected._id?"talk-bubble tri-right round left-in":"talk-bubble tri-right round right-in"}>
                   <div className="talktext">
                     <p>{message.message}</p>
                    
                   </div>
                   <div style={{position:'absolute', bottom:0, right:20, fontSize:'12px'}}>{formatTimestamp(message.timestamp)}</div>
+                </div>))}
                 </div>
-                )):(<div>{`Start A Chat :)`}</div>)}
-              </div>
+                ):(<div>{`Start A Chat :)`}</div>)}
+              
               <div className="message-input">
                 <input
                   type="text"
@@ -305,10 +312,10 @@ if(newSocket){
                     newSocket.emit('typing',{roomName:roomId})
                   }}
                 />
-                <button onClick={handleSendMessage}>Send</button>
+                <button onClick={handleSendMessage}><FontAwesomeIcon icon={faPaperPlane}/></button>
               </div>
             </div>
-              ):(<div>Click On a comrade to start a Chat!</div>)}
+              )}
       </div>
     </div>
   );

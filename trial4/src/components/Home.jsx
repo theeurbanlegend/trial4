@@ -5,6 +5,7 @@ import Sidebar from './Sidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight ,faHamburger} from '@fortawesome/free-solid-svg-icons';
 import { createContext } from 'react';
+import Splashpage from './Splashpage';
 export const sidebarContext=createContext()
 const Home = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -25,7 +26,7 @@ const Home = () => {
       )}
       <div className="content">
         <Navbar />
-        <Posts />
+        {selectedCategory==='HOME'?<Splashpage/>:<Posts />}
       </div>
     </div>
     </sidebarContext.Provider>

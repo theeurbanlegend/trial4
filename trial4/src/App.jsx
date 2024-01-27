@@ -16,7 +16,7 @@ const App = () => {
   
 
   return (
-    <div>
+    <div className='main'>
       <Router>
         <Routes>
           <Route path='/*' element={<Home/>} />

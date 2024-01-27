@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const UserProfile = () => {
   const [user, setUser] = useState({ fullname: '', currentEmail: '', username: '' });
+  const [isSaving, setIsSaving] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [previewURL, setPreviewURL] = useState(null)
   const { id } = useParams();
@@ -18,12 +19,12 @@ const UserProfile = () => {
   const [currentPhotoId, setCurrentPhotoId] = useState('');
   const [showOtpForm, setShowOtpForm] = useState(false); // State to control OTP form visibility
   const [newProfilePicture, setNewProfilePicture] = useState(null);
-
+  const url='https://api-brosforlyf.onrender.com'
   useEffect(() => {
     // Fetch user data from the server
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`https://api-brosforlyf.onrender.com/api/user/current/${id}`);
+        const response = await axios.get(`${url}/api/user/current/${id}`);
         const userData = response.data.user;
         setUser(userData);
         setProfilePhotoId(userData.photo.filename);
@@ -36,12 +37,17 @@ const UserProfile = () => {
     fetchUserData();
   }, [id]); // Dependency on id to re-fetch data when id changes
 
-  const toggleEditMode = () => {
-    setEditEmailMode(!editEmailMode);
-    setEditPhotoMode(!editPhotoMode);
+  const closeEditMode = () => {
+    setEditEmailMode(false);
+    setEditPhotoMode(false);
+  };
+  const openEditMode = () => {
+    setEditEmailMode(true);
+    
   };
 
   const handleSave = async () => {
+    setIsSaving(true)
     // If a new profile picture is selected, upload it first
     if (editPhotoMode) {
       const formData = new FormData();
@@ -49,7 +55,7 @@ const UserProfile = () => {
       formData.append('id', id);
       formData.append('currentPhotoId', currentPhotoId);
       try {
-        const uploadResponse = await axios.post('https://api-brosforlyf.onrender.com/api/user/add', formData, {
+        const uploadResponse = await axios.post(`${url}/api/user/add`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -62,6 +68,7 @@ const UserProfile = () => {
       } catch (uploadError) {
         console.error('Error uploading profile picture:', uploadError);
         // Handle the error (show a message, etc.)
+        setIsSaving(false)
         return;
       }
     }
@@ -69,7 +76,7 @@ const UserProfile = () => {
     // Perform save operation (update the user's email)
     try {
       if(editEmailMode){
-      const response = await axios.post('https://api-brosforlyf.onrender.com/api/user/update', {
+      const response = await axios.post(`${url}/api/user/update`, {
         username: user.username,
         oldemail: user.currentEmail,
         newemail: newEmail,
@@ -84,12 +91,13 @@ const UserProfile = () => {
           ...prevUser,
           currentEmail: newEmail,
         }));
-
+        setIsSaving(false)
         // Disable edit mode after saving
         setEditEmailMode(false);
       }
     }
     } catch (error) {
+      setIsSaving(false)
       console.error('Error updating email:', error);
     }
   };
@@ -98,7 +106,7 @@ const UserProfile = () => {
   const handleOtpSubmit = async (otp) => {
     try {
       // Send OTP to the server for verification
-      const response = await axios.post('https://api-brosforlyf.onrender.com/api/user/verify', {
+      const response = await axios.post(`${url}/api/user/verify`, {
         otp,
         id,
       });
@@ -149,7 +157,7 @@ const UserProfile = () => {
       <div className="profile-header">
       {!previewURL &&(
         <div className="profile-photo" onClick={()=>setEditPhotoMode(true)}>
-          <img src={`https://api-brosforlyf.onrender.com/api/user/photo/${profilePhotoId}`} alt="Profile" />
+          <img src={`${url}/api/user/photo/${profilePhotoId}`} alt="Profile" />
           <div className="over-lay">
             <span>Change Pic</span>
           </div>
@@ -190,12 +198,12 @@ const UserProfile = () => {
       <div className="profile-actions">
         {editPhotoMode||editEmailMode ? (
           <>
-          <button style={{marginRight:'10px'}} onClick={handleSave}>Save</button>
-          <button onClick={toggleEditMode}>Cancel</button>
+          <button disabled={isSaving} style={{marginRight:'10px'}} onClick={handleSave}>Save</button>
+          <button onClick={closeEditMode}>Cancel</button>
           </>
           
         ) : (
-          <button style={{ position: 'absolute', bottom: 0, right: 0, marginRight: '2px', marginBottom: '2px' }} onClick={toggleEditMode}>Edit</button>
+          <button style={{ position: 'absolute', bottom: 0, right: 0, marginRight: '2px', marginBottom: '2px' }} onClick={openEditMode}>Edit</button>
         )}
       </div>
 
